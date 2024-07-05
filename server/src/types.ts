@@ -8,10 +8,11 @@ export type Image = InferSelectModel<typeof schema.Image>;
 type ItemWithImages = Item & { images: Image[] };
 type ListWithItems = List & { items: ItemWithImages[] };
 
-// Sockets
+// Socket Events
+export type ErrorReponse = { error: string };
 export type RespondFunction<T> = T extends undefined
-  ? (val?: { error: string }) => void
-  : (val: T | { error: string }) => void;
+  ? (val?: ErrorReponse) => void
+  : (val: T | ErrorReponse) => void;
 export type EventWithAwk<T extends Record<string, unknown>, R = undefined> = (
   args: T,
   respond: RespondFunction<R>,
