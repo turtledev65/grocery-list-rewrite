@@ -1,5 +1,7 @@
-"use client"
+"use client";
+import { io, Socket } from "socket.io-client";
+import { ClientToServerEvents, ServerToClientEvents } from "./types";
 
-import {io} from "socket.io-client"
-
-export const socket = io("http://localhost:4000");
+export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
+  "http://localhost:4000",
+);
