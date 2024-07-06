@@ -18,7 +18,7 @@ export const Item = pgTable("item", {
 
 export const ItemRelations = relations(Item, ({ one, many }) => ({
   list: one(List, {
-    fields: [Item.id],
+    fields: [Item.listId],
     references: [List.id],
   }),
   images: many(Image),
