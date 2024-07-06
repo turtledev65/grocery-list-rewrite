@@ -4,7 +4,7 @@ import "./types";
 import { ClientToServerEvents, ServerToClientEvents } from "./types";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
-import { List } from "./db/schema";
+import { Item, List } from "./db/schema";
 import { isUUID } from "./utils";
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>({
@@ -47,6 +47,19 @@ io.on("connection", socket => {
     }
 
     respond(list);
+  });
+
+  socket.on("add-item", async (args, respond) => {
+    if (!isUUID(args.listId)) {
+      respond({ error: `${args.listId} is not a valid UUID` });
+      return;
+    }
+
+    const [item] = await db
+      .insert(Item)
+      .values({ listId: args.listId, text: args.text })
+      .returning();
+    respond(item);
   });
 });
 
