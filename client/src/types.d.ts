@@ -1,14 +1,14 @@
 export type List = {
   id: string;
   name: string;
-  items: Item[];
+  items?: Item[];
 };
 
 export type Item = {
   id: string;
   listId: string;
   text: string;
-  images: Image[];
+  images?: Image[];
 };
 
 export type Image = {

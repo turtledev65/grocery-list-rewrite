@@ -59,7 +59,7 @@ const ListPage = ({ params }: Props) => {
             : list.name}
       </h1>
       {status == "error" && <p>{error.message}</p>}
-      <ul>{list?.items.map(item => <li key={item.id}>{item.text}</li>)}</ul>
+      <ul>{list?.items?.map(item => <li key={item.id}>{item.text}</li>)}</ul>
       <form
         ref={formRef}
         onSubmit={handleAddItem}
