@@ -2,7 +2,7 @@ import { type InferSelectModel } from "drizzle-orm";
 import * as schema from "./db/schema";
 
 export type List = InferSelectModel<typeof schema.List> & { items?: Item[] };
-export type Item = InferSelectModel<typeof schema.Item> & {images?: Image[]};
+export type Item = InferSelectModel<typeof schema.Item> & { images?: Image[] };
 export type Image = InferSelectModel<typeof schema.Image>;
 
 // Socket Events
@@ -22,4 +22,5 @@ export interface ClientToServerEvents {
   "join-list": EventWithAwk<{ id: string }>;
   "get-list": EventWithAwk<{ id: string }, List>;
   "add-item": EventWithAwk<{ listId: string; text: string }, Item>;
+  "delete-item": EventWithAwk<{ id: string }, Item>;
 }

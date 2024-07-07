@@ -61,6 +61,25 @@ io.on("connection", socket => {
       .returning();
     respond(item);
   });
+
+  socket.on("delete-item", async (args, respond) => {
+    if (!isUUID(args.id)) {
+      respond({ error: `${args.id} is not a valid UUID` });
+      return;
+    }
+
+    const [item] = await db
+      .delete(Item)
+      .where(eq(Item.id, args.id))
+      .returning();
+
+    if (!item) {
+      respond({ error: `Failed to find item with id ${args.id}` });
+      return;
+    }
+
+    return item;
+  });
 });
 
 io.listen(parseInt(process.env.PORT));
