@@ -1,9 +1,7 @@
 "use client";
 
-import { socket } from "@/socket";
-import { Item, List } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { FormEvent, useRef } from "react";
+import { useAddItem, useGetList } from "./hooks";
 
 type Props = {
   params: {
@@ -15,53 +13,8 @@ const ListPage = ({ params }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const queryClient = useQueryClient();
-  const {
-    data: list,
-    status,
-    error,
-  } = useQuery({
-    queryKey: [params.id],
-    queryFn: async () => {
-      const res = await socket.emitWithAck("get-list", { id: params.id });
-      if ("error" in res) throw new Error(res.error);
-      return res;
-    },
-  });
-  const { mutate: addItem } = useMutation({
-    mutationFn: async (text: string) => {
-      const res = await socket.emitWithAck("add-item", {
-        listId: params.id,
-        text,
-      });
-      if ("error" in res) throw new Error(res.error);
-      return res;
-    },
-    onMutate: async (text: string) => {
-      await queryClient.cancelQueries({ queryKey: [params.id] });
-      const prevList = queryClient.getQueryData<List>([params.id]);
-      queryClient.setQueryData<List>([params.id], old => {
-        if (!old) return;
-
-        const oldItems = old.items ?? [];
-        const newItem: Item = {
-          id: String(old.items?.length),
-          listId: params.id,
-          text,
-          sending: true,
-        };
-
-        return { ...old, items: [...oldItems, newItem] } as List;
-      });
-      return { prevList };
-    },
-    onError: (_data, _variables, context) => {
-      queryClient.setQueryData([params.id], context?.prevList);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [params.id] });
-    },
-  });
+  const { data: list, status, error } = useGetList(params.id);
+  const { mutate: addItem } = useAddItem(params.id);
 
   const handleAddItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
