@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useRef } from "react";
+import { FormEvent, useCallback, useRef } from "react";
 import { useAddItem, useDeleteItem, useGetList } from "./hooks";
 
 type Props = {
@@ -17,14 +17,17 @@ const ListPage = ({ params }: Props) => {
   const { mutate: addItem } = useAddItem(params.id);
   const { mutate: deleteItem } = useDeleteItem(params.id);
 
-  const handleAddItem = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const text = inputRef.current?.value.trim();
-    if (!text) return;
+  const handleAddItem = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const text = inputRef.current?.value.trim();
+      if (!text) return;
 
-    formRef.current?.reset();
-    addItem(text);
-  };
+      formRef.current?.reset();
+      addItem(text);
+    },
+    [params.id],
+  );
 
   return (
     <>
