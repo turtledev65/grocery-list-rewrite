@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useRef } from "react";
-import { useAddItem, useGetList } from "./hooks";
+import { useAddItem, useDeleteItem, useGetList } from "./hooks";
 
 type Props = {
   params: {
@@ -15,6 +15,7 @@ const ListPage = ({ params }: Props) => {
 
   const { data: list, status, error } = useGetList(params.id);
   const { mutate: addItem } = useAddItem(params.id);
+  const { mutate: deleteItem } = useDeleteItem(params.id);
 
   const handleAddItem = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -37,8 +38,19 @@ const ListPage = ({ params }: Props) => {
       {status == "error" && <p>{error.message}</p>}
       <ul>
         {list?.items?.map(item => (
-          <li key={item.id} className={`${item.sending && "text-gray-500"}`}>
-            {item.text}
+          <li
+            key={item.id}
+            className={`${item.sending && "text-gray-500"} flex flex-row items-center justify-between`}
+          >
+            <p>{item.text}</p>
+            {!item.sending && (
+              <button
+                onClick={() => deleteItem(item.id)}
+                className="font-bold text-red-600"
+              >
+                X
+              </button>
+            )}
           </li>
         ))}
       </ul>
