@@ -46,6 +46,7 @@ const ListPage = ({ params }: Props) => {
     const text = inputRef.current?.value.trim();
     if (!text) return;
 
+    formRef.current?.reset();
     addItem(text);
   };
 
