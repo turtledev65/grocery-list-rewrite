@@ -38,6 +38,7 @@ io.on("connection", socket => {
       with: {
         items: {
           with: { images: true },
+          orderBy: Item.creationDate,
         },
       },
     });
@@ -87,7 +88,11 @@ io.on("connection", socket => {
       return;
     }
 
-    const [item] = await db.update(Item).set({ text: args.text }).where(eq(Item.id, args.id)).returning();
+    const [item] = await db
+      .update(Item)
+      .set({ text: args.text })
+      .where(eq(Item.id, args.id))
+      .returning();
     if (!item) {
       respond({ error: `Failed to find item with id ${args.id}` });
       return;
