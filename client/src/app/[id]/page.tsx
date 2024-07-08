@@ -15,7 +15,6 @@ const ListPage = ({ params }: Props) => {
 
   const { data: list, status, error } = useGetList(params.id);
   const { mutate: addItem } = useAddItem(params.id);
-  const { mutate: deleteItem } = useDeleteItem(params.id);
 
   const handleAddItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -41,20 +40,13 @@ const ListPage = ({ params }: Props) => {
       {status == "error" && <p>{error.message}</p>}
       <ul>
         {list?.items?.map(item => (
-          <li
+          <Item
+            text={item.text}
+            sending={item.sending}
+            id={item.id}
+            listId={params.id}
             key={item.id}
-            className={`${item.sending && "text-gray-500"} flex flex-row items-center justify-between`}
-          >
-            <p>{item.text}</p>
-            {!item.sending && (
-              <button
-                onClick={() => deleteItem(item.id)}
-                className="font-bold text-red-600"
-              >
-                X
-              </button>
-            )}
-          </li>
+          />
         ))}
       </ul>
       <form
@@ -75,6 +67,35 @@ const ListPage = ({ params }: Props) => {
         </button>
       </form>
     </>
+  );
+};
+
+type ItemProps = {
+  text: string;
+  sending?: boolean;
+  id: string;
+  listId: string;
+};
+const Item = ({ text, sending, id, listId }: ItemProps) => {
+  const { mutate: deleteItem } = useDeleteItem(listId);
+
+  const handleDeleteItem = useCallback(() => {
+    deleteItem(id);
+  }, [deleteItem, id]);
+
+  return (
+    <li
+      className={`${sending && "text-gray-500"} flex flex-row items-center justify-between`}
+    >
+      <div>
+        <p>{text}</p>
+      </div>
+      {!sending && (
+        <button onClick={handleDeleteItem} className="font-bold text-red-600">
+          X
+        </button>
+      )}
+    </li>
   );
 };
 
