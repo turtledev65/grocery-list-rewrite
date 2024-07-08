@@ -80,6 +80,21 @@ io.on("connection", socket => {
 
     return item;
   });
+
+  socket.on("edit-item", async (args, respond) => {
+    if (!isUUID) {
+      respond({ error: `${args.id} is not a valid UUID` });
+      return;
+    }
+
+    const [item] = await db.update(Item).set({ text: args.text }).where(eq(Item.id, args.id)).returning();
+    if (!item) {
+      respond({ error: `Failed to find item with id ${args.id}` });
+      return;
+    }
+
+    respond(item);
+  });
 });
 
 io.listen(parseInt(process.env.PORT));
