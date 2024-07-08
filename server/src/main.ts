@@ -79,7 +79,7 @@ io.on("connection", socket => {
       return;
     }
 
-    return item;
+    respond(item);
   });
 
   socket.on("edit-item", async (args, respond) => {
