@@ -4,7 +4,8 @@ import "./types";
 import { ClientToServerEvents, ServerToClientEvents } from "./types";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
-import { Item, List } from "./db/schema";
+import { Item, List, Image } from "./db/schema";
+import { Image as ImageType } from "./types";
 import { isUUID } from "./utils";
 
 const io = new Server<ClientToServerEvents, ServerToClientEvents>({
@@ -60,7 +61,17 @@ io.on("connection", socket => {
       .insert(Item)
       .values({ listId: args.listId, text: args.text })
       .returning();
-    respond(item);
+
+    let images: ImageType[] = [];
+    if (args.images && args.images.length > 0) {
+      const values = args.images?.map(url => ({
+        itemId: item.id,
+        url,
+      }));
+      images = await db.insert(Image).values(values).returning();
+    }
+
+    respond({ ...item, images });
   });
 
   socket.on("delete-item", async (args, respond) => {
