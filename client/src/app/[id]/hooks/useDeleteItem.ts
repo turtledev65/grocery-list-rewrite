@@ -23,7 +23,7 @@ const useDeleteItem = (listId: string) => {
       queryClient.setQueryData<List>([listId], context?.prevList);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({queryKey: [listId]});
+      queryClient.invalidateQueries({ queryKey: [listId] });
     },
   });
 
