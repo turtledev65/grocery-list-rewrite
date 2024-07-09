@@ -1,8 +1,8 @@
 "use client";
 
-import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { FormEvent, useCallback, useRef, useState } from "react";
 import { useAddItem, useDeleteItem, useEditItem, useGetList } from "./hooks";
-import { useMutationState } from "@tanstack/react-query";
+import { Item as ItemProps } from "@/types";
 
 type Props = {
   params: {
@@ -71,13 +71,7 @@ const ListPage = ({ params }: Props) => {
   );
 };
 
-type ItemProps = {
-  text: string;
-  pending?: boolean;
-  id: string;
-  listId: string;
-};
-const Item = ({ text, pending, id, listId }: ItemProps) => {
+const Item = ({ id, listId, text, pending }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
