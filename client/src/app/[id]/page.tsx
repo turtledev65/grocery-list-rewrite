@@ -26,7 +26,7 @@ const ListPage = ({ params }: Props) => {
       formRef.current?.reset();
       addItem(text);
     },
-    [params.id],
+    [addItem],
   );
 
   return (
@@ -88,7 +88,7 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
       setEditing(false);
       editItem({ newText, id });
     },
-    [editItem, id],
+    [editItem, id, text],
   );
   const handleDeleteItem = useCallback(() => {
     deleteItem(id);
