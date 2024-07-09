@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent, useCallback, useRef } from "react";
-import { useAddItem, useDeleteItem, useGetList } from "./hooks";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import { useAddItem, useDeleteItem, useEditItem, useGetList } from "./hooks";
+import { useMutationState } from "@tanstack/react-query";
 
 type Props = {
   params: {
@@ -77,8 +78,24 @@ type ItemProps = {
   listId: string;
 };
 const Item = ({ text, sending, id, listId }: ItemProps) => {
-  const { mutate: deleteItem } = useDeleteItem(listId);
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [editing, setEditing] = useState(false);
 
+  const { mutate: deleteItem } = useDeleteItem(listId);
+  const { mutate: editItem } = useEditItem(listId);
+
+  const handleEditItem = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const newText = inputRef.current?.value.trim();
+      if (!newText || newText === text) return;
+
+      setEditing(false);
+      editItem({ newText, id });
+    },
+    [editItem, id],
+  );
   const handleDeleteItem = useCallback(() => {
     deleteItem(id);
   }, [deleteItem, id]);
@@ -87,10 +104,22 @@ const Item = ({ text, sending, id, listId }: ItemProps) => {
     <li
       className={`${sending && "text-gray-500"} flex flex-row items-center justify-between`}
     >
-      <div>
-        <p>{text}</p>
+      <div onClick={() => setEditing(true)} className="w-full">
+        {editing ? (
+          <form ref={formRef} onSubmit={handleEditItem}>
+            <input
+              defaultValue={text}
+              autoFocus
+              ref={inputRef}
+              onBlur={() => setEditing(false)}
+              className="w-full"
+            />
+          </form>
+        ) : (
+          <p>{text}</p>
+        )}
       </div>
-      {!sending && (
+      {!sending && !editing && (
         <button onClick={handleDeleteItem} className="font-bold text-red-600">
           X
         </button>
