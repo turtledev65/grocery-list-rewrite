@@ -1,22 +1,35 @@
 "use client";
 
+import { useUploadThing } from "@/app/api/uploadthing/core";
 import { socket } from "@/socket";
 import { Item, List } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const useAddItem = (listId: string) => {
   const queryClient = useQueryClient();
+  const { startUpload } = useUploadThing("imageUploader");
+
   const mutation = useMutation({
-    mutationFn: async (text: string) => {
+    mutationFn: async (args: { text: string; imageFiles?: File[] }) => {
+      const { text, imageFiles } = args;
+
+      let images: string[] | undefined = [];
+      if (imageFiles && imageFiles.length > 0)
+        images = (await startUpload(imageFiles))?.map(i => i.url);
+      console.log(images)
+
       const res = await socket.emitWithAck("add-item", {
         listId: listId,
         text,
+        images,
       });
       if ("error" in res) throw new Error(res.error);
       return res;
     },
-    onMutate: async (text: string) => {
+    onMutate: async args => {
       await queryClient.cancelQueries({ queryKey: [listId] });
+
+      const { text } = args;
       const prevList = queryClient.getQueryData<List>([listId]);
       queryClient.setQueryData<List>([listId], old => {
         if (!old) return;

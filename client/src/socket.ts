@@ -18,9 +18,12 @@ interface ClientToServerEvents {
   "delete-list": EventWithAwk<{ id: string }>;
   "join-list": EventWithAwk<{ id: string }>;
   "get-list": EventWithAwk<{ id: string }, List>;
-  "add-item": EventWithAwk<{ listId: string; text: string }, Item>;
+  "add-item": EventWithAwk<
+    { listId: string; text: string; images?: string[] },
+    Item
+  >;
   "delete-item": EventWithAwk<{ id: string }, Item>;
-  "edit-item": EventWithAwk<{ id: string, text: string }, Item>;
+  "edit-item": EventWithAwk<{ id: string; text: string }, Item>;
 }
 
 export const socket: Socket<ServerToClientEvents, ClientToServerEvents> = io(
