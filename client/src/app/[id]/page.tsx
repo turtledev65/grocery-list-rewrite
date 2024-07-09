@@ -98,7 +98,7 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
     <li
       className={`${pending && "text-gray-500"} flex flex-row items-center justify-between`}
     >
-      <div onClick={() => setEditing(true)} className="w-full">
+      <div onClick={() => setEditing(!pending && true)} className="w-full">
         {editing ? (
           <form ref={formRef} onSubmit={handleEditItem}>
             <input
