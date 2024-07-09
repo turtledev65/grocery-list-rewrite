@@ -16,4 +16,5 @@ export type Image = {
   id: string;
   itemId: string;
   url: string;
+  pending?: boolean;
 };

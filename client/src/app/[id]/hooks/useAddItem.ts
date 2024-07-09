@@ -2,7 +2,7 @@
 
 import { useUploadThing } from "@/app/api/uploadthing/core";
 import { socket } from "@/socket";
-import { Item, List } from "@/types";
+import { Item, List, Image } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const useAddItem = (listId: string) => {
@@ -16,7 +16,6 @@ const useAddItem = (listId: string) => {
       let images: string[] | undefined = [];
       if (imageFiles && imageFiles.length > 0)
         images = (await startUpload(imageFiles))?.map(i => i.url);
-      console.log(images)
 
       const res = await socket.emitWithAck("add-item", {
         listId: listId,
@@ -35,10 +34,19 @@ const useAddItem = (listId: string) => {
         if (!old) return;
 
         const oldItems = old.items ?? [];
+        const images = args.imageFiles?.map(
+          (file, idx) =>
+            ({
+              url: URL.createObjectURL(file),
+              id: String(idx),
+              pending: true,
+            }) as Image,
+        );
         const newItem: Item = {
           id: String(old.items?.length),
           listId: listId,
           text,
+          images,
           pending: true,
         };
 
