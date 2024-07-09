@@ -83,7 +83,7 @@ io.on("connection", socket => {
   });
 
   socket.on("edit-item", async (args, respond) => {
-    if (!isUUID) {
+    if (!isUUID(args.id)) {
       respond({ error: `${args.id} is not a valid UUID` });
       return;
     }
