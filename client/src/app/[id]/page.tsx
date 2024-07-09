@@ -43,7 +43,7 @@ const ListPage = ({ params }: Props) => {
         {list?.items?.map(item => (
           <Item
             text={item.text}
-            sending={item.sending}
+            pending={item.pending}
             id={item.id}
             listId={params.id}
             key={item.id}
@@ -73,11 +73,11 @@ const ListPage = ({ params }: Props) => {
 
 type ItemProps = {
   text: string;
-  sending?: boolean;
+  pending?: boolean;
   id: string;
   listId: string;
 };
-const Item = ({ text, sending, id, listId }: ItemProps) => {
+const Item = ({ text, pending, id, listId }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [editing, setEditing] = useState(false);
@@ -102,7 +102,7 @@ const Item = ({ text, sending, id, listId }: ItemProps) => {
 
   return (
     <li
-      className={`${sending && "text-gray-500"} flex flex-row items-center justify-between`}
+      className={`${pending && "text-gray-500"} flex flex-row items-center justify-between`}
     >
       <div onClick={() => setEditing(true)} className="w-full">
         {editing ? (
@@ -119,7 +119,7 @@ const Item = ({ text, sending, id, listId }: ItemProps) => {
           <p>{text}</p>
         )}
       </div>
-      {!sending && !editing && (
+      {!pending && !editing && (
         <button onClick={handleDeleteItem} className="font-bold text-red-600">
           X
         </button>

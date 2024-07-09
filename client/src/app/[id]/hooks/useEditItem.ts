@@ -23,7 +23,7 @@ const useEditItem = (listId: string) => {
         const newItems = [...old.items!];
         const idx = newItems.findIndex(i => i.id === args.id);
         if (idx < 0) return;
-        newItems[idx] = { ...newItems[idx], text: args.newText, sending: true };
+        newItems[idx] = { ...newItems[idx], text: args.newText, pending: true };
 
         return { ...old, items: newItems };
       });

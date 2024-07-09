@@ -26,7 +26,7 @@ const useAddItem = (listId: string) => {
           id: String(old.items?.length),
           listId: listId,
           text,
-          sending: true,
+          pending: true,
         };
 
         return { ...old, items: [...oldItems, newItem] } as List;

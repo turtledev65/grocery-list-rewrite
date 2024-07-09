@@ -9,7 +9,7 @@ export type Item = {
   listId: string;
   text: string;
   images?: Image[];
-  sending?: boolean;
+  pending?: boolean;
 };
 
 export type Image = {
