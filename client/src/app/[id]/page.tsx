@@ -11,23 +11,7 @@ type Props = {
 };
 
 const ListPage = ({ params }: Props) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-
   const { data: list, status, error } = useGetList(params.id);
-  const { mutate: addItem } = useAddItem(params.id);
-
-  const handleAddItem = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const text = inputRef.current?.value.trim();
-      if (!text) return;
-
-      formRef.current?.reset();
-      addItem(text);
-    },
-    [addItem],
-  );
 
   return (
     <>
@@ -50,23 +34,7 @@ const ListPage = ({ params }: Props) => {
           />
         ))}
       </ul>
-      <form
-        ref={formRef}
-        onSubmit={handleAddItem}
-        className="absolute bottom-0 left-0 flex w-full flex-row gap-2 p-2"
-      >
-        <input
-          ref={inputRef}
-          type="text"
-          className="w-full rounded-2xl border-2 border-gray-700 bg-gray-100 px-2 py-1 text-xl"
-        />
-        <button
-          type="submit"
-          className="rounded-3xl border-2 border-gray-700 bg-gray-100 px-2"
-        >
-          OK
-        </button>
-      </form>
+      <ItemForm listId={params.id} />
     </>
   );
 };
@@ -119,6 +87,45 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
         </button>
       )}
     </li>
+  );
+};
+
+const ItemForm = ({ listId }: { listId: string }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: addItem } = useAddItem(listId);
+
+  const handleAddItem = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const text = inputRef.current?.value.trim();
+      if (!text) return;
+
+      formRef.current?.reset();
+      addItem(text);
+    },
+    [addItem],
+  );
+
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handleAddItem}
+      className="absolute bottom-0 left-0 flex w-full flex-row gap-2 p-2"
+    >
+      <input
+        ref={inputRef}
+        type="text"
+        className="w-full rounded-2xl border-2 border-gray-700 bg-gray-100 px-2 py-1 text-xl"
+      />
+      <button
+        type="submit"
+        className="rounded-3xl border-2 border-gray-700 bg-gray-100 px-2"
+      >
+        OK
+      </button>
+    </form>
   );
 };
 
