@@ -119,6 +119,7 @@ io.on("connection", socket => {
       images = await db.insert(Image).values(values).returning();
     }
 
+    socket.broadcast.emit("list-updated", item.listId);
     respond({ ...item, images });
   });
 
@@ -145,6 +146,7 @@ io.on("connection", socket => {
         return;
       }
 
+      socket.broadcast.emit("list-updated", item.listId);
       respond(item);
     });
   });
@@ -165,6 +167,7 @@ io.on("connection", socket => {
       return;
     }
 
+    socket.broadcast.emit("list-updated", item.listId);
     respond(item);
   });
 });

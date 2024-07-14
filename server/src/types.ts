@@ -14,7 +14,9 @@ export type EventWithAwk<T, R = undefined> = T extends undefined
   ? (respond: RespondFunction<R>) => void
   : (args: T, respond: RespondFunction<R>) => void;
 
-export interface ServerToClientEvents {}
+export interface ServerToClientEvents {
+  "list-updated": (id: string) => void;
+}
 export interface ClientToServerEvents {
   "get-all-lists": EventWithAwk<undefined, List[]>;
   "create-list": EventWithAwk<{ name: string }, List>;
