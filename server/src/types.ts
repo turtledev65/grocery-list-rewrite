@@ -16,6 +16,7 @@ export type EventWithAwk<T, R = undefined> = T extends undefined
 
 export interface ServerToClientEvents {}
 export interface ClientToServerEvents {
+  "get-all-lists": EventWithAwk<undefined, List[]>;
   "create-list": EventWithAwk<{ name: string }, List>;
   "delete-list": EventWithAwk<{ id: string }>;
   "join-list": EventWithAwk<{ id: string }>;

@@ -15,6 +15,11 @@ const io = new Server<ClientToServerEvents, ServerToClientEvents>({
 io.on("connection", socket => {
   console.log(`${socket.id} connected`);
 
+  socket.on("get-all-lists", async respond => {
+    const lists = await db.select().from(List).orderBy(List.creationDate);
+    respond(lists);
+  });
+
   socket.on("create-list", async (args, respond) => {
     const [list] = await db
       .insert(List)
