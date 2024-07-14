@@ -5,7 +5,7 @@ import { List } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useCallback, useRef } from "react";
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,17 +56,23 @@ export default function Home() {
     },
   });
 
-  const handleCreateList = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const name = inputRef.current?.value.trim();
-    if (!name) return;
+  const handleCreateList = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const name = inputRef.current?.value.trim();
+      if (!name) return;
 
-    createList(name);
-  };
+      createList(name);
+    },
+    [createList],
+  );
 
-  const handleDeleteList = async (list: List) => {
-    deleteList(list.id);
-  };
+  const handleDeleteList = useCallback(
+    async (list: List) => {
+      deleteList(list.id);
+    },
+    [deleteList],
+  );
 
   return (
     <>
