@@ -15,7 +15,7 @@ export interface ServerToClientEvents {}
 export interface ClientToServerEvents {
   "get-all-lists": EventWithAwk<undefined, List[]>;
   "create-list": EventWithAwk<{ name: string }, List>;
-  "delete-list": EventWithAwk<{ id: string }>;
+  "delete-list": EventWithAwk<{ id: string }, List>;
   "join-list": EventWithAwk<{ id: string }>;
   "get-list": EventWithAwk<{ id: string }, List>;
   "add-item": EventWithAwk<

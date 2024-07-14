@@ -1,6 +1,7 @@
 "use client";
 
 import { socket } from "@/socket";
+import { List } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,6 +33,28 @@ export default function Home() {
       router.push(data.id);
     },
   });
+  const { mutate: deleteList } = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await socket.emitWithAck("delete-list", { id });
+      if ("error" in res) throw new Error(res.error);
+      return res;
+    },
+    onMutate: async listId => {
+      await queryClient.cancelQueries({ queryKey: ["all-lists"] });
+      const prev = queryClient.getQueryData<List[]>(["all-lists"]);
+      queryClient.setQueryData<List[]>(["all-lists"], old => {
+        if (!old) return;
+        return old.filter(list => list.id !== listId);
+      });
+      return { prev };
+    },
+    onError: (_error, _variables, context) => {
+      queryClient.setQueryData<List[]>(["all-lists"], context?.prev);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-lists"] });
+    },
+  });
 
   const handleCreateList = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -39,6 +62,10 @@ export default function Home() {
     if (!name) return;
 
     createList(name);
+  };
+
+  const handleDeleteList = async (list: List) => {
+    deleteList(list.id);
   };
 
   return (
@@ -52,6 +79,12 @@ export default function Home() {
             className="flex flex-row items-center justify-between"
           >
             <Link href={list.id}>{list.name}</Link>
+            <button
+              className="font-bold text-red-500"
+              onClick={() => handleDeleteList(list)}
+            >
+              X
+            </button>
           </li>
         ))}
       </ul>
