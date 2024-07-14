@@ -14,7 +14,7 @@ export const ListRelations = relations(List, ({ many }) => ({
 export const Item = pgTable("item", {
   id: uuid("id").primaryKey().defaultRandom(),
   listId: uuid("listId").notNull(),
-  text: varchar("text").notNull(),
+  text: varchar("text"),
   creationDate: timestamp("creationDate").notNull().defaultNow(),
 });
 

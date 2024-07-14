@@ -79,6 +79,10 @@ io.on("connection", socket => {
       respond({ error: `${args.listId} is not a valid UUID` });
       return;
     }
+    if (!args.text && !args.images?.length) {
+      respond({ error: `Item must contain some information` });
+      return;
+    }
 
     const [item] = await db
       .insert(Item)
