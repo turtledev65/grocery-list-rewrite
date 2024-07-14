@@ -2,11 +2,8 @@
 
 import { socket } from "@/socket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
 
 const useCreateList = () => {
-  const router = useRouter();
-
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: async (name: string) => {
@@ -16,7 +13,7 @@ const useCreateList = () => {
     },
     onSuccess: data => {
       queryClient.setQueryData([data.id], data);
-      router.push(data.id);
+      queryClient.invalidateQueries({ queryKey: ["all-lists"] });
     },
   });
 
