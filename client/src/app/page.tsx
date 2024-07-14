@@ -2,6 +2,7 @@
 
 import { socket } from "@/socket";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useRef } from "react";
 
@@ -12,7 +13,7 @@ export default function Home() {
   const router = useRouter();
 
   const queryClient = useQueryClient();
-  const { data: allLists } = useQuery({
+  const { data: allLists, isLoading } = useQuery({
     queryKey: ["all-lists"],
     queryFn: async () => {
       const res = await socket.emitWithAck("get-all-lists");
@@ -42,7 +43,18 @@ export default function Home() {
 
   return (
     <>
-      <ul>{allLists?.map(list => <li key={list.id}>{list.name}</li>)}</ul>
+      <h1 className="space-y-4 text-3xl font-bold">All Lists</h1>
+      {isLoading && <p>Loading...</p>}
+      <ul>
+        {allLists?.map(list => (
+          <li
+            key={list.id}
+            className="flex flex-row items-center justify-between"
+          >
+            <Link href={list.id}>{list.name}</Link>
+          </li>
+        ))}
+      </ul>
       <form
         ref={formRef}
         onSubmit={handleCreateList}
