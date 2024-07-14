@@ -1,9 +1,22 @@
 "use client";
 
 import { socket } from "@/socket";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 const useGetList = (id: string) => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    socket.on("list-updated", listId =>
+      queryClient.invalidateQueries({ queryKey: [listId] }),
+    );
+
+    return () => {
+      socket.off("list-updated");
+    };
+  }, []);
+
   const query = useQuery({
     queryKey: [id],
     queryFn: async () => {
