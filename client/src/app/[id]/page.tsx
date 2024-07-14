@@ -8,7 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useAddItem, useDeleteItem, useEditItem, useGetList } from "./hooks";
+import { useAddItem, useDeleteItem, useEditItem, useGetList } from "./_hooks";
 import { Item as ItemProps, Image as ImageProps } from "@/types";
 
 type Props = {
