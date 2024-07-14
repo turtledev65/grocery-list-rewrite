@@ -1,60 +1,17 @@
 "use client";
 
-import { socket } from "@/socket";
 import { List } from "@/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { FormEvent, useCallback, useRef } from "react";
+import { useCreateList, useDeleteList, useGetAllLists } from "./_hooks";
 
 export default function Home() {
   const inputRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const router = useRouter();
-
-  const queryClient = useQueryClient();
-  const { data: allLists, isLoading } = useQuery({
-    queryKey: ["all-lists"],
-    queryFn: async () => {
-      const res = await socket.emitWithAck("get-all-lists");
-      if ("error" in res) throw new Error(res.error);
-      return res;
-    },
-  });
-  const { mutate: createList } = useMutation({
-    mutationFn: async (name: string) => {
-      const res = await socket.emitWithAck("create-list", { name });
-      if ("error" in res) throw new Error(res.error);
-      return res;
-    },
-    onSuccess: data => {
-      queryClient.setQueryData([data.id], data);
-      router.push(data.id);
-    },
-  });
-  const { mutate: deleteList } = useMutation({
-    mutationFn: async (id: string) => {
-      const res = await socket.emitWithAck("delete-list", { id });
-      if ("error" in res) throw new Error(res.error);
-      return res;
-    },
-    onMutate: async listId => {
-      await queryClient.cancelQueries({ queryKey: ["all-lists"] });
-      const prev = queryClient.getQueryData<List[]>(["all-lists"]);
-      queryClient.setQueryData<List[]>(["all-lists"], old => {
-        if (!old) return;
-        return old.filter(list => list.id !== listId);
-      });
-      return { prev };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData<List[]>(["all-lists"], context?.prev);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["all-lists"] });
-    },
-  });
+  const { data: allLists, isLoading } = useGetAllLists();
+  const { mutate: createList } = useCreateList();
+  const { mutate: deleteList } = useDeleteList();
 
   const handleCreateList = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
