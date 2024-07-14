@@ -4,6 +4,7 @@ import { pgTable, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 export const List = pgTable("list", {
   id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name").notNull(),
+  creationDate: timestamp("creationDate").notNull().defaultNow(),
 });
 
 export const ListRelations = relations(List, ({ many }) => ({

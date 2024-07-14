@@ -1,0 +1,1 @@
+ALTER TABLE "list" ADD COLUMN "creationDate" timestamp DEFAULT now() NOT NULL;
