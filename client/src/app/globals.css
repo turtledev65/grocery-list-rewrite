@@ -4,6 +4,6 @@
 
 @layer base {
   html {
-    @apply bg-gray-50;
+    @apply bg-gray-50 selection:bg-purple-200;
   }
 }
