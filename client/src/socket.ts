@@ -7,13 +7,13 @@ type ErrorReponse = { error: string };
 type RespondFunction<T> = T extends undefined
   ? (val?: ErrorReponse) => void
   : (val: T | ErrorReponse) => void;
-type EventWithAwk<T extends Record<string, unknown>, R = undefined> = (
-  args: T,
-  respond: RespondFunction<R>,
-) => void;
+type EventWithAwk<T, R = undefined> = T extends undefined
+  ? (respond: RespondFunction<R>) => void
+  : (args: T, respond: RespondFunction<R>) => void;
 
-interface ServerToClientEvents {}
-interface ClientToServerEvents {
+export interface ServerToClientEvents {}
+export interface ClientToServerEvents {
+  "get-all-lists": EventWithAwk<undefined, List[]>;
   "create-list": EventWithAwk<{ name: string }, List>;
   "delete-list": EventWithAwk<{ id: string }>;
   "join-list": EventWithAwk<{ id: string }>;
