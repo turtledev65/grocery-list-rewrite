@@ -3,7 +3,7 @@ import { Server } from "socket.io";
 import "./types";
 import { ClientToServerEvents, ServerToClientEvents } from "./types";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { Item, List, Image } from "./db/schema";
 import { Image as ImageType } from "./types";
 import { isUUID } from "./utils";
@@ -39,16 +39,33 @@ io.on("connection", socket => {
       return;
     }
 
-    const [list] = await db
-      .delete(List)
-      .where(eq(List.id, args.id))
-      .returning();
-    if (!list) {
-      respond({ error: `Failed to find list with id ${args.id}` });
-      return;
-    }
+    db.transaction(async tx => {
+      await tx
+        .delete(Image)
+        .where(
+          inArray(
+            Image.itemId,
+            tx
+              .select({ id: Item.id })
+              .from(Item)
+              .where(eq(Item.listId, args.id)),
+          ),
+        );
 
-    respond(list);
+      await tx.delete(Item).where(eq(Item.listId, args.id));
+
+      const [list] = await tx
+        .delete(List)
+        .where(eq(List.id, args.id))
+        .returning();
+      if (!list) {
+        tx.rollback();
+        respond({ error: `Failed to find list with id ${args.id}` });
+        return;
+      }
+
+      respond(list);
+    });
   });
 
   socket.on("get-list", async (args, respond) => {
