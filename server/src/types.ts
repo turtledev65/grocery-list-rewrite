@@ -10,10 +10,9 @@ export type ErrorReponse = { error: string };
 export type RespondFunction<T> = T extends undefined
   ? (val?: ErrorReponse) => void
   : (val: T | ErrorReponse) => void;
-export type EventWithAwk<T extends Record<string, unknown>, R = undefined> = (
-  args: T,
-  respond: RespondFunction<R>,
-) => void;
+export type EventWithAwk<T, R = undefined> = T extends undefined
+  ? (respond: RespondFunction<R>) => void
+  : (args: T, respond: RespondFunction<R>) => void;
 
 export interface ServerToClientEvents {}
 export interface ClientToServerEvents {
