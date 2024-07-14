@@ -10,7 +10,7 @@ const useAddItem = (listId: string) => {
   const { startUpload } = useUploadThing("imageUploader");
 
   const mutation = useMutation({
-    mutationFn: async (args: { text: string; imageFiles?: File[] }) => {
+    mutationFn: async (args: { text?: string; imageFiles?: File[] }) => {
       const { text, imageFiles } = args;
 
       let images: string[] | undefined = [];

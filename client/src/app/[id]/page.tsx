@@ -71,40 +71,49 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
   }, [deleteItem, id]);
 
   return (
-    <li className={`${pending && "text-gray-500"} flex flex-col`}>
-      <div className="flex flex-row items-center justify-between">
-        <div onClick={() => setEditing(!pending && true)} className="w-full">
-          {editing ? (
-            <form ref={formRef} onSubmit={handleEditItem}>
-              <input
-                defaultValue={text}
-                autoFocus
-                ref={inputRef}
-                onBlur={() => setEditing(false)}
-                className="w-full"
-              />
-            </form>
-          ) : (
-            <p>{text}</p>
+    <li
+      className={`${pending && "text-gray-500"} flex flex-row items-center justify-between`}
+    >
+      <div className="flex flex-col">
+        <div className="flex flex-row items-center">
+          {text && (
+            <div
+              onClick={() => setEditing(!pending && true)}
+              className="w-full"
+            >
+              {editing ? (
+                <form ref={formRef} onSubmit={handleEditItem}>
+                  <input
+                    defaultValue={text}
+                    autoFocus
+                    ref={inputRef}
+                    onBlur={() => setEditing(false)}
+                    className="w-full"
+                  />
+                </form>
+              ) : (
+                <p>{text}</p>
+              )}
+            </div>
           )}
         </div>
-        {!pending && !editing && (
-          <button onClick={handleDeleteItem} className="font-bold text-red-600">
-            X
-          </button>
-        )}
+        <div className="flex flex-row gap-2">
+          {images?.map(img => (
+            <Image
+              id={img.id}
+              itemId={img.itemId}
+              url={img.url}
+              pending={img.pending}
+              key={img.id}
+            />
+          ))}
+        </div>
       </div>
-      <div className="flex flex-row gap-2">
-        {images?.map(img => (
-          <Image
-            id={img.id}
-            itemId={img.itemId}
-            url={img.url}
-            pending={img.pending}
-            key={img.id}
-          />
-        ))}
-      </div>
+      {!pending && !editing && (
+        <button onClick={handleDeleteItem} className="font-bold text-red-600">
+          X
+        </button>
+      )}
     </li>
   );
 };
@@ -125,7 +134,7 @@ const Image = ({ url, pending }: ImageProps) => {
               cy="12"
               r="10"
               stroke="currentColor"
-              stroke-width="4"
+              strokeWidth="4"
             ></circle>
             <path
               className="opacity-75"
@@ -155,7 +164,7 @@ const ItemForm = ({ listId }: { listId: string }) => {
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const text = inputRef.current?.value.trim();
-      if (!text) return;
+      if (!text && !imageFiles.length) return;
 
       formRef.current?.reset();
       addItem({ text, imageFiles });

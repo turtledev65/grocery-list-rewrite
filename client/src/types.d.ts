@@ -7,7 +7,7 @@ export type List = {
 export type Item = {
   id: string;
   listId: string;
-  text: string;
+  text?: string;
   images?: Image[];
   pending?: boolean;
 };
