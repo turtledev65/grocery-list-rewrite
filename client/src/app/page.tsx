@@ -1,73 +1,24 @@
 "use client";
 
-import { List } from "@/types";
-import Link from "next/link";
-import { FormEvent, useCallback, useRef } from "react";
-import { useCreateList, useDeleteList, useGetAllLists } from "./_hooks";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  const { data: allLists, isLoading } = useGetAllLists();
-  const { mutate: createList } = useCreateList();
-  const { mutate: deleteList } = useDeleteList();
-
-  const handleCreateList = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const name = inputRef.current?.value.trim();
-      if (!name) return;
-
-      createList(name);
-    },
-    [createList],
-  );
-
-  const handleDeleteList = useCallback(
-    async (list: List) => {
-      deleteList(list.id);
-    },
-    [deleteList],
-  );
+  const router = useRouter();
 
   return (
-    <>
-      <h1 className="space-y-4 text-3xl font-bold">All Lists</h1>
-      {isLoading && <p>Loading...</p>}
-      <ul>
-        {allLists?.map(list => (
-          <li
-            key={list.id}
-            className="flex flex-row items-center justify-between"
-          >
-            <Link href={list.id}>{list.name}</Link>
-            <button
-              className="font-bold text-red-500"
-              onClick={() => handleDeleteList(list)}
-            >
-              X
-            </button>
-          </li>
-        ))}
-      </ul>
-      <form
-        ref={formRef}
-        onSubmit={handleCreateList}
-        className="absolute bottom-0 left-0 flex w-full flex-row gap-2 p-2"
-      >
-        <input
-          ref={inputRef}
-          type="text"
-          className="w-full rounded-2xl border-2 border-gray-700 bg-gray-100 px-2 py-1 text-xl"
-        />
+    <main className="flex h-screen flex-col items-center justify-center">
+      <h1 className="mb-4 text-4xl font-bold">No list open</h1>
+      <div className="flex flex-col gap-2 align-baseline">
         <button
-          type="submit"
-          className="rounded-3xl border-2 border-gray-700 bg-gray-100 px-2"
+          onClick={() => router.push("list/new")}
+          className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400"
         >
-          Create List
+          Create new list
         </button>
-      </form>
-    </>
+        <button className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400">
+          Close
+        </button>
+      </div>
+    </main>
   );
 }
