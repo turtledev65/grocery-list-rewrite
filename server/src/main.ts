@@ -124,17 +124,21 @@ io.on("connection", socket => {
       return;
     }
 
-    const [item] = await db
-      .delete(Item)
-      .where(eq(Item.id, args.id))
-      .returning();
+    await db.transaction(async tx => {
+      await tx.delete(Image).where(eq(Image.itemId, args.id));
 
-    if (!item) {
-      respond({ error: `Failed to find item with id ${args.id}` });
-      return;
-    }
+      const [item] = await tx
+        .delete(Item)
+        .where(eq(Item.id, args.id))
+        .returning();
+      if (!item) {
+        tx.rollback();
+        respond({ error: `Failed to find item with id ${args.id}` });
+        return;
+      }
 
-    respond(item);
+      respond(item);
+    });
   });
 
   socket.on("edit-item", async (args, respond) => {
