@@ -59,7 +59,11 @@ io.on("connection", socket => {
         .where(eq(List.id, args.id))
         .returning();
       if (!list) {
-        tx.rollback();
+        try {
+          tx.rollback();
+        } catch (err) {
+          console.error(err);
+        }
         respond({ error: `Failed to find list with id ${args.id}` });
         return;
       }
@@ -132,7 +136,11 @@ io.on("connection", socket => {
         .where(eq(Item.id, args.id))
         .returning();
       if (!item) {
-        tx.rollback();
+        try {
+          tx.rollback();
+        } catch (err) {
+          console.error(err);
+        }
         respond({ error: `Failed to find item with id ${args.id}` });
         return;
       }
