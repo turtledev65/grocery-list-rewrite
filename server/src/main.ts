@@ -33,6 +33,25 @@ io.on("connection", socket => {
     respond(list);
   });
 
+  socket.on("rename-list", async (args, respond) => {
+    if (!isUUID(args.id)) {
+      respond({ error: `${args.id} is an invalid UUID` });
+      return;
+    }
+
+    const [list] = await db
+      .update(List)
+      .set({ name: args.name })
+      .where(eq(List.id, args.id))
+      .returning();
+    if (!list) {
+      respond({ error: `Failed to find list with id ${args.id}` });
+      return;
+    }
+
+    respond(list);
+  });
+
   socket.on("delete-list", async (args, respond) => {
     if (!isUUID(args.id)) {
       respond({ error: `${args.id} is an invalid UUID` });
