@@ -1,10 +1,17 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useCallback, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
 import useRenameList from "@/app/_hooks/useRenameList";
-import { list } from "postcss";
+import { useSearchParams } from "next/navigation";
 
 type Props = {
   params: {
@@ -13,9 +20,12 @@ type Props = {
 };
 
 const ListPage = ({ params }: Props) => {
+  const searchParams = useSearchParams();
+  const isNew = searchParams.get("new")?.toLowerCase() === "true";
+
   const { data: list, status, error } = useGetList(params.id);
 
-  const textInputRef = useRef<HTMLInputElement>(null);
+  const itemTextRef = useRef<HTMLInputElement>(null);
   const { mutate: addItem } = useAddItem(params.id);
 
   const [creating, setCreating] = useState(false);
@@ -24,7 +34,7 @@ const ListPage = ({ params }: Props) => {
       e.preventDefault();
       setCreating(false);
 
-      const text = textInputRef.current?.value.trim();
+      const text = itemTextRef.current?.value.trim();
       if (!text) return;
 
       addItem({ text });
@@ -44,7 +54,7 @@ const ListPage = ({ params }: Props) => {
 
   return (
     <main className="p-4">
-      <ListTitle title={list!.name} listId={list!.id} />
+      <ListTitle title={list!.name} listId={list!.id} isNew={isNew} />
       <ul>
         {list?.items?.map(item => (
           <Item
@@ -61,7 +71,7 @@ const ListPage = ({ params }: Props) => {
             <input
               autoFocus
               onBlur={() => setCreating(false)}
-              ref={textInputRef}
+              ref={itemTextRef}
               className="outline-none"
             />
           </form>
@@ -75,7 +85,15 @@ const ListPage = ({ params }: Props) => {
   );
 };
 
-const ListTitle = ({ title, listId }: { title: string; listId: string }) => {
+const ListTitle = ({
+  title,
+  listId,
+  isNew,
+}: {
+  title: string;
+  listId: string;
+  isNew: boolean;
+}) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -92,6 +110,10 @@ const ListTitle = ({ title, listId }: { title: string; listId: string }) => {
     [renameList, title],
   );
 
+  useEffect(() => {
+    if (isNew) inputRef?.current?.select();
+  }, []);
+
   return (
     <form onSubmit={handleRenameList} ref={formRef}>
       <input
@@ -99,6 +121,7 @@ const ListTitle = ({ title, listId }: { title: string; listId: string }) => {
         defaultValue={title}
         ref={inputRef}
         onBlur={() => formRef.current?.reset()}
+        autoFocus={isNew}
         className="w-full text-4xl font-bold outline-none selection:bg-purple-200"
       />
     </form>
