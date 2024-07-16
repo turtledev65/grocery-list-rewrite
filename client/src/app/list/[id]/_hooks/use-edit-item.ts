@@ -1,7 +1,6 @@
 import { socket } from "@/socket";
 import { List } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { list } from "postcss";
 
 const useEditItem = (listId: string) => {
   const queryClient = useQueryClient();
