@@ -3,6 +3,8 @@
 import { ChangeEvent, FormEvent, useCallback, useRef, useState } from "react";
 import { Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
+import useRenameList from "@/app/_hooks/useRenameList";
+import { list } from "postcss";
 
 type Props = {
   params: {
@@ -11,7 +13,7 @@ type Props = {
 };
 
 const ListPage = ({ params }: Props) => {
-  const { data: list } = useGetList(params.id);
+  const { data: list, status, error } = useGetList(params.id);
 
   const textInputRef = useRef<HTMLInputElement>(null);
   const { mutate: addItem } = useAddItem(params.id);
@@ -30,9 +32,19 @@ const ListPage = ({ params }: Props) => {
     [addItem],
   );
 
+  if (status === "error")
+    return (
+      <>
+        <h1 className="text-4xl font-bold text-red-500">Error</h1>
+        <p className="text-red-500">{error.message}</p>
+      </>
+    );
+
+  if (status === "pending") return <p className="text-lg">Loading...</p>;
+
   return (
     <main className="p-4">
-      <h1 className="text-4xl font-bold">{list?.name}</h1>
+      <ListTitle title={list!.name} listId={list!.id} />
       <ul>
         {list?.items?.map(item => (
           <Item
@@ -63,6 +75,36 @@ const ListPage = ({ params }: Props) => {
   );
 };
 
+const ListTitle = ({ title, listId }: { title: string; listId: string }) => {
+  const formRef = useRef<HTMLFormElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const { mutate: renameList } = useRenameList(listId);
+  const handleRenameList = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const newTitle = inputRef.current?.value.trim();
+      if (!newTitle || newTitle === title) return;
+
+      inputRef.current?.blur();
+      renameList(newTitle);
+    },
+    [renameList, title],
+  );
+
+  return (
+    <form onSubmit={handleRenameList} ref={formRef}>
+      <input
+        type="text"
+        defaultValue={title}
+        ref={inputRef}
+        onBlur={() => formRef.current?.reset()}
+        className="w-full text-4xl font-bold outline-none selection:bg-purple-200"
+      />
+    </form>
+  );
+};
+
 const AddButton = ({
   onCreateTextItem,
   onCreateItemWithImages,
@@ -70,7 +112,6 @@ const AddButton = ({
   onCreateTextItem: () => void;
   onCreateItemWithImages: (files: File[]) => void;
 }) => {
-
   const handleAttachImages = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const fileList = e.target.files;
