@@ -10,8 +10,8 @@ import {
 } from "react";
 import { Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
-import useRenameList from "@/app/_hooks/useRenameList";
 import { useSearchParams } from "next/navigation";
+import { useRenameList } from "@/app/_hooks";
 
 type Props = {
   params: {
