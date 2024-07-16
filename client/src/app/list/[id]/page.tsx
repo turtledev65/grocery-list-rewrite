@@ -12,6 +12,7 @@ import { Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
 import { useSearchParams } from "next/navigation";
 import { useRenameList } from "@/app/_hooks";
+import { motion } from "framer-motion";
 
 type Props = {
   params: {
@@ -67,14 +68,21 @@ const ListPage = ({ params }: Props) => {
           />
         ))}
         {creating && (
-          <form onSubmit={handleAddItem}>
+          <motion.form
+            initial={{ scale: 0 }}
+            animate={{
+              scale: "100%",
+              transition: { type: "spring", bounce: 0.35 },
+            }}
+            onSubmit={handleAddItem}
+          >
             <input
               autoFocus
               onBlur={() => setCreating(false)}
               ref={itemTextRef}
-              className="outline-none"
+              className="w-full outline-none"
             />
-          </form>
+          </motion.form>
         )}
       </ul>
       <AddButton
