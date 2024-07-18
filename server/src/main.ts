@@ -123,10 +123,16 @@ io.on("connection", socket => {
       respond({ error: `Item must contain some information` });
       return;
     }
+    if (typeof args.id === "string" && !isUUID(args.id)) {
+      respond({
+        error: `The given id for the item(${args.id}) is not a valid UUID`,
+      });
+      return;
+    }
 
     const [item] = await db
       .insert(Item)
-      .values({ listId: args.listId, text: args.text })
+      .values({ listId: args.listId, text: args.text, id: args.id })
       .returning();
 
     let images: ImageType[] = [];
