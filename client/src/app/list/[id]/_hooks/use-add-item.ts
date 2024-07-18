@@ -4,11 +4,13 @@ import { useUploadThing } from "@/app/api/uploadthing/core";
 import { socket } from "@/socket";
 import { Item, List, Image } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRef } from "react";
 
 const useAddItem = (listId: string) => {
   const queryClient = useQueryClient();
   const { startUpload } = useUploadThing("imageUploader");
 
+  const itemIdRef = useRef("");
   const mutation = useMutation({
     mutationFn: async (args: { text?: string; imageFiles?: File[] }) => {
       const { text, imageFiles } = args;
@@ -19,6 +21,7 @@ const useAddItem = (listId: string) => {
 
       const res = await socket.emitWithAck("add-item", {
         listId: listId,
+        id: itemIdRef.current,
         text,
         images,
       });
@@ -29,7 +32,8 @@ const useAddItem = (listId: string) => {
       await queryClient.cancelQueries({ queryKey: [listId] });
 
       const { text } = args;
-      const prevList = queryClient.getQueryData<List>([listId]);
+      itemIdRef.current = crypto.randomUUID();
+
       queryClient.setQueryData<List>([listId], old => {
         if (!old) return;
 
@@ -43,22 +47,35 @@ const useAddItem = (listId: string) => {
             }) as Image,
         );
         const newItem: Item = {
-          id: String(old.items?.length),
+          id: itemIdRef.current,
           listId: listId,
           text,
-          images,
+          images: images,
           pending: true,
         };
 
         return { ...old, items: [...oldItems, newItem] } as List;
       });
-      return { prevList };
     },
-    onError: (_data, _variables, context) => {
-      queryClient.setQueryData([listId], context?.prevList);
+    onSuccess: res => {
+      queryClient.setQueryData<List>([listId], old => {
+        if (!old) return;
+
+        const newItems = [...(old.items ?? [])];
+        const idx = newItems.findIndex(i => i.id === itemIdRef.current);
+        newItems[idx] = res;
+
+        return { ...old, items: newItems };
+      });
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [listId] });
+    onError: () => {
+      queryClient.setQueryData<List>([listId], old => {
+        if (!old) return;
+        return {
+          ...old,
+          items: old.items?.filter(item => item.id !== itemIdRef.current),
+        };
+      });
     },
   });
 

@@ -22,7 +22,7 @@ export interface ClientToServerEvents {
   "join-list": EventWithAwk<{ id: string }>;
   "get-list": EventWithAwk<{ id: string }, List>;
   "add-item": EventWithAwk<
-    { listId: string; text?: string; images?: string[] },
+    { listId: string; id?: string; text?: string; images?: string[] },
     Item
   >;
   "delete-item": EventWithAwk<{ id: string }, Item>;
