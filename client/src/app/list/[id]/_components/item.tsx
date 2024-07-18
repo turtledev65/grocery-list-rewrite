@@ -37,7 +37,7 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
   }, [deleteItem, id]);
 
   return (
-    <li>
+    <motion.li layout transition={{ type: "spring" }}>
       <SwipeableContainer
         draggable={!editing && !pending}
         onSwipe={handleDeleteItem}
@@ -55,7 +55,7 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
           />
         </form>
       </SwipeableContainer>
-    </li>
+    </motion.li>
   );
 };
 
@@ -72,7 +72,15 @@ const SwipeableContainer = ({
 
   return (
     <div className="relative">
-      <div className="absolute inset-0 z-[-10] bg-red-500">X</div>
+      <motion.div
+        className="absolute inset-0 z-[-10] flex flex-row justify-end bg-red-500 font-bold text-white"
+        exit={{
+          translateX: "-100%",
+          transition: { delay: 0.15, duration: 0.1 },
+        }}
+      >
+        X
+      </motion.div>
       <motion.div
         drag={draggable && "x"}
         dragConstraints={{ left: 0, right: 0 }}
@@ -80,6 +88,7 @@ const SwipeableContainer = ({
         onDragEnd={(_, info) => {
           if (Math.abs(info.offset.x) >= DRAG_THRESHOLD) onSwipe();
         }}
+        exit={{ translateX: "-100%", transition: { duration: 0.2 } }}
         className="bg-gray-50"
       >
         {children}

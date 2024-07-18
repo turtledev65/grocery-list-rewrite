@@ -12,7 +12,7 @@ import { Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
 import { useSearchParams } from "next/navigation";
 import { useRenameList } from "@/app/_hooks";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 type Props = {
   params: {
@@ -57,16 +57,18 @@ const ListPage = ({ params }: Props) => {
     <main className="p-4">
       <ListTitle title={list!.name} listId={list!.id} isNew={isNew} />
       <ul>
-        {list?.items?.map(item => (
-          <Item
-            text={item.text}
-            images={item.images}
-            pending={item.pending}
-            id={item.id}
-            listId={item.listId}
-            key={item.id}
-          />
-        ))}
+        <AnimatePresence>
+          {list?.items?.map(item => (
+            <Item
+              text={item.text}
+              images={item.images}
+              pending={item.pending}
+              id={item.id}
+              listId={item.listId}
+              key={item.id}
+            />
+          ))}
+        </AnimatePresence>
         {creating && (
           <motion.form
             initial={{ scale: 0 }}
