@@ -26,7 +26,7 @@ const Sidebar = () => {
             onClick={deactivate}
           />
           <motion.aside
-            className={`fixed bottom-0 top-0 z-50 w-[75vw] rounded-r-xl bg-gray-50 p-2`}
+            className={`fixed bottom-0 top-0 z-50 w-[75vw] rounded-r-xl bg-gray-50 p-4`}
             key="sidebar"
             initial={{ left: "-75vw" }}
             animate={{ left: 0 }}
