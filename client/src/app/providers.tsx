@@ -46,7 +46,7 @@ export const SidebarContext = createContext<SidebarContextType>(
   {} as SidebarContextType,
 );
 const SidebarProvider = ({ children }: PropsWithChildren) => {
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const toggle = useCallback(() => {
     setActive(old => !old);
