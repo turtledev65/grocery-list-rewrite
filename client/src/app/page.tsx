@@ -17,7 +17,7 @@ export default function Home() {
   }, [createList, router]);
 
   return (
-    <main className="flex h-screen flex-col items-center justify-center">
+    <main className="flex  flex-col h-full items-center justify-center">
       <h1 className="mb-4 text-4xl font-bold">No list open</h1>
       <div className="flex flex-col gap-2 align-baseline">
         <button
