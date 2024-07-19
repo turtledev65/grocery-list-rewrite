@@ -51,7 +51,7 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
               setEditing(false);
               formRef?.current?.reset();
             }}
-            className={`${pending ? "text-gray-500" : "text-black"} w-full`}
+            className={`${pending ? "text-gray-500" : "text-black"} w-full bg-gray-50`}
           />
         </form>
       </SwipeableContainer>
