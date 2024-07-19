@@ -73,7 +73,7 @@ const SwipeableContainer = ({
   return (
     <div className="relative">
       <motion.div
-        className="absolute inset-0 z-[-10] flex flex-row justify-end bg-red-500 font-bold text-white"
+        className="absolute inset-[0.6px] z-[-10] flex flex-row justify-end bg-red-500 font-bold text-white"
         exit={{
           translateX: "-100%",
           transition: { delay: 0.15, duration: 0.1 },
