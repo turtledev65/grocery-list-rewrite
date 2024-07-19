@@ -18,7 +18,7 @@ const Sidebar = () => {
       {active && (
         <>
           <motion.div
-            className="absolute inset-0 z-10 cursor-pointer bg-black"
+            className="fixed inset-0 z-40 cursor-pointer bg-black"
             key="bg"
             initial={{ opacity: 0 }}
             animate={{ opacity: "75%" }}
@@ -26,7 +26,7 @@ const Sidebar = () => {
             onClick={deactivate}
           />
           <motion.aside
-            className={`absolute bottom-0 top-0 z-20 w-[75vw] rounded-r-xl bg-gray-50 p-2`}
+            className={`fixed bottom-0 top-0 z-50 w-[75vw] rounded-r-xl bg-gray-50 p-2`}
             key="sidebar"
             initial={{ left: "-75vw" }}
             animate={{ left: 0 }}

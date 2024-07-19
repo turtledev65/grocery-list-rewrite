@@ -21,7 +21,7 @@ const Navbar = () => {
   const { activate } = useContext(SidebarContext);
 
   return (
-    <nav className="sticky top-0 flex w-full items-center justify-between bg-gray-50 p-2 z-10">
+    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-2">
       <button onClick={activate}>
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
