@@ -86,6 +86,7 @@ const SwipeableContainer = ({
         dragConstraints={{ left: 0, right: 0 }}
         dragElastic={{ left: 0.3 }}
         onDragEnd={(_, info) => {
+          if (info.offset.x > 0) return;
           if (Math.abs(info.offset.x) >= DRAG_THRESHOLD) onSwipe();
         }}
         exit={{ translateX: "-100%", transition: { duration: 0.2 } }}
