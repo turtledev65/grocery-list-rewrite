@@ -22,11 +22,14 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-2">
-      <button onClick={activate}>
+      <button
+        onClick={activate}
+        className="transition-opacity hover:opacity-70"
+      >
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
       {isEditingList && <h1 className="text-lg">{list?.name}</h1>}
-      <button>
+      <button className="transition-opacity hover:opacity-70">
         <OptionsIcon className="text-purple-600" />
       </button>
     </nav>

@@ -1,15 +1,13 @@
 "use client";
 
-import { MdOutlineSettings } from "react-icons/md";
+import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
 import { useGetAllLists } from "../_hooks";
-import { useRouter } from "next/navigation";
 import { useContext } from "react";
 import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 const Sidebar = () => {
-  const router = useRouter();
   const { data: allLists } = useGetAllLists();
   const { active, deactivate } = useContext(SidebarContext);
 
@@ -34,8 +32,8 @@ const Sidebar = () => {
           >
             <div className="flex items-center justify-between py-4">
               <h1 className="text-nowrap text-2xl font-bold">All Lists</h1>
-              <button className="grid place-items-center">
-                <MdOutlineSettings className="text-2xl text-purple-600" />
+              <button className="grid place-items-center transition-opacity hover:opacity-70">
+                <SettingsIcon className="text-2xl text-purple-600" />
               </button>
             </div>
             <div className="flex flex-col">
