@@ -18,10 +18,10 @@ const Navbar = () => {
   }, [pathname]);
   const { data: list } = useGetList(listId);
 
-  const {activate} = useContext(SidebarContext);
+  const { activate } = useContext(SidebarContext);
 
   return (
-    <nav className="flex w-full items-center justify-between p-2">
+    <nav className="sticky top-0 flex w-full items-center justify-between bg-gray-50 p-2 z-10">
       <button onClick={activate}>
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
