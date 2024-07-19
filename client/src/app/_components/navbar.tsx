@@ -1,10 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useContext, useMemo } from "react";
 import { BiSidebar as SidebarIcon } from "react-icons/bi";
 import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
 import { useGetList } from "../list/[id]/_hooks";
+import { SidebarContext } from "../providers";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -17,9 +18,11 @@ const Navbar = () => {
   }, [pathname]);
   const { data: list } = useGetList(listId);
 
+  const {activate} = useContext(SidebarContext);
+
   return (
     <nav className="flex w-full items-center justify-between p-2">
-      <button>
+      <button onClick={activate}>
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
       {isEditingList && <h1 className="text-lg">{list?.name}</h1>}

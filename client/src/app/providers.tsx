@@ -1,12 +1,14 @@
 "use client";
 
-import { PropsWithChildren } from "react";
+// React Query Provider
+import { PropsWithChildren, useCallback, useState } from "react";
 import {
   isServer,
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { createContext } from "react";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -33,13 +35,47 @@ function getQueryClient() {
   }
 }
 
+// Sidebar Provider
+type SidebarContextType = {
+  active: boolean;
+  toggle: () => void;
+  activate: () => void;
+  deactivate: () => void;
+};
+export const SidebarContext = createContext<SidebarContextType>(
+  {} as SidebarContextType,
+);
+const SidebarProvider = ({ children }: PropsWithChildren) => {
+  const [active, setActive] = useState(true);
+
+  const toggle = useCallback(() => {
+    setActive(old => !old);
+  }, []);
+  const activate = useCallback(() => {
+    setActive(true);
+  }, []);
+  const deactivate = useCallback(() => {
+    setActive(false);
+  }, []);
+
+  return (
+    <SidebarContext.Provider value={{ active, toggle, activate, deactivate }}>
+      {children}
+    </SidebarContext.Provider>
+  );
+};
+
 const Providers = ({ children }: PropsWithChildren) => {
   const queryClient = getQueryClient();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {children}
-      <ReactQueryDevtools initialIsOpen={false} buttonPosition="top-right" position="right" />
+      <SidebarProvider>{children}</SidebarProvider>
+      <ReactQueryDevtools
+        initialIsOpen={false}
+        buttonPosition="top-right"
+        position="right"
+      />
     </QueryClientProvider>
   );
 };
