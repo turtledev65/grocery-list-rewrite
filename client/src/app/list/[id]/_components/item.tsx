@@ -10,6 +10,7 @@ import {
 } from "react";
 import { useDeleteItem, useEditItem } from "../_hooks";
 import { motion } from "framer-motion";
+import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 
 const Item = ({ id, listId, text, pending, images }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -73,13 +74,13 @@ const SwipeableContainer = ({
   return (
     <div className="relative">
       <motion.div
-        className="absolute inset-[0.6px] -z-10 flex flex-row justify-end bg-red-500 font-bold text-white"
+        className="absolute inset-[0.6px] -z-10 flex flex-row justify-end items-center bg-red-500 font-bold text-white"
         exit={{
           translateX: "-100%",
           transition: { delay: 0.15, duration: 0.1 },
         }}
       >
-        X
+        <DeleteIcon className="text-lg" />
       </motion.div>
       <motion.div
         drag={draggable && "x"}
