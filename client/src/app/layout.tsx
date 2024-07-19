@@ -4,6 +4,7 @@ import "./globals.css";
 import Providers from "./providers";
 import Navbar from "./_components/navbar";
 import Sidebar from "./_components/sidebar";
+import { Panel } from "./_components/panel";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={`${inter.className} h-screen`}>
         <Providers>
           <Sidebar />
+          <Panel />
           <div className="flex h-full flex-col">
             <Navbar />
             {children}

@@ -54,7 +54,7 @@ const ListPage = ({ params }: Props) => {
   if (status === "pending") return <p className="text-lg">Loading...</p>;
 
   return (
-    <main className="p-4">
+    <main className="overflow-y-auto overflow-x-hidden p-4">
       <ListTitle title={list!.name} listId={list!.id} isNew={isNew} />
       <ul>
         <AnimatePresence>
@@ -132,7 +132,7 @@ const ListTitle = ({
         ref={inputRef}
         onBlur={() => formRef.current?.reset()}
         autoFocus={isNew}
-        className="w-full text-4xl font-bold outline-none selection:bg-purple-200 bg-gray-50"
+        className="w-full bg-gray-50 text-4xl font-bold outline-none selection:bg-purple-200"
       />
     </form>
   );
