@@ -6,10 +6,10 @@ import { BiSidebar as SidebarIcon } from "react-icons/bi";
 import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
 import { useGetList } from "../list/[id]/_hooks";
 import { SidebarContext } from "../providers";
-import { usePanel } from "./panel";
 import { MdClose as CloseIcon } from "react-icons/md";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import usePanel from "../hooks/ui/usePanel";
 
 const Navbar = () => {
   const router = useRouter();

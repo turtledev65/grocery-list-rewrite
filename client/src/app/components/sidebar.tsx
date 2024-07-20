@@ -11,8 +11,8 @@ import {
   FaRegTrashAlt as DeleteIcon,
 } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
-import { usePanel } from "./panel";
 import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
+import usePanel from "../hooks/ui/usePanel";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";

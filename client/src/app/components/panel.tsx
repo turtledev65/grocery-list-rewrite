@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
 import { PanelContext } from "../providers";
 import { PanelItem, PanelSection } from "@/types";
+import usePanel from "../hooks/ui/usePanel";
 
 function isPanelSection(
   val: PanelSection | PanelSection[],
@@ -11,26 +12,6 @@ function isPanelSection(
   if ("label" in val[0]) return true;
   return false;
 }
-
-type UsePanelData = PanelSection | PanelSection[];
-type UsePanelArgs = {
-  title?: string;
-  data: UsePanelData;
-};
-export const usePanel = (args: UsePanelArgs | (() => UsePanelArgs)) => {
-  let res: UsePanelArgs;
-  if (typeof args === "function") res = args();
-  else res = args;
-
-  const { title, data } = res;
-
-  const { activate, setTitle, setData } = useContext(PanelContext);
-  return () => {
-    setTitle(title);
-    setData(data);
-    activate();
-  };
-};
 
 export const Panel = () => {
   const { active, title, data, deactivate } = useContext(PanelContext);
