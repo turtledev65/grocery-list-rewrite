@@ -5,14 +5,13 @@ import { useCreateList, useDeleteList, useGetAllLists } from "../_hooks";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
-import Link from "next/link";
 import { FiEdit as CreateListIcon } from "react-icons/fi";
 import { LuFilter as FilterIcon } from "react-icons/lu";
 import {
   FaSortAmountDownAlt as SortIcon,
   FaRegTrashAlt as DeleteIcon,
 } from "react-icons/fa";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { usePanel } from "./panel";
 
 type SortOrder = "asc" | "desc";
@@ -142,6 +141,13 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
   const { deactivate } = useContext(SidebarContext);
   const [isSelected, setSelected] = useState(false);
 
+  const pathname = usePathname();
+  const listId = useMemo(() => {
+    const idx = pathname.search("list/");
+    if (idx < 0) return "";
+    return pathname.substring(idx + "list/".length);
+  }, [pathname]);
+
   const { mutate: deleteList } = useDeleteList();
   const activatePanel = usePanel({
     title: name,
@@ -149,7 +155,10 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
       {
         label: "Delete",
         icon: <DeleteIcon className="text-xl" />,
-        action: () => deleteList(id),
+        action: () => {
+          deleteList(id);
+          if (listId === id) router.push("/");
+        },
         critical: true,
       },
     ],
