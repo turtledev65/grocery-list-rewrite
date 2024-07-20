@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export type List = {
   id: string;
   name: string;
@@ -18,3 +20,12 @@ export type Image = {
   url: string;
   pending?: boolean;
 };
+
+export type PanelItem = {
+  label: string;
+  icon?: ReactNode;
+  critical?: boolean;
+  className?: string;
+  action: () => void;
+};
+export type PanelSection = PanelItem[];

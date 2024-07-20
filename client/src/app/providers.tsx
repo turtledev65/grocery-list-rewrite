@@ -15,6 +15,7 @@ import {
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createContext } from "react";
+import { PanelSection } from "@/types";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -72,9 +73,6 @@ const SidebarProvider = ({ children }: PropsWithChildren) => {
 };
 
 // Panel
-type PanelItem = { label: string; action: () => void };
-type PanelSection = PanelItem[];
-
 type PanelContextType = {
   active: boolean;
   title?: string;
@@ -116,11 +114,6 @@ const Providers = ({ children }: PropsWithChildren) => {
       <PanelProvider>
         <SidebarProvider>{children}</SidebarProvider>
       </PanelProvider>
-      <ReactQueryDevtools
-        initialIsOpen={false}
-        buttonPosition="bottom-left"
-        position="right"
-      />
     </QueryClientProvider>
   );
 };

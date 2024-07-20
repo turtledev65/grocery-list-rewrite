@@ -3,9 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
 import { PanelContext } from "../providers";
-
-type PanelItem = { label: string; action: () => void };
-type PanelSection = PanelItem[];
+import { PanelItem, PanelSection } from "@/types";
 
 function isPanelSection(
   val: PanelSection | PanelSection[],
