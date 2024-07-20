@@ -7,8 +7,12 @@ import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
 import { useGetList } from "../list/[id]/_hooks";
 import { SidebarContext } from "../providers";
 import { usePanel } from "./panel";
+import { MdClose as CloseIcon } from "react-icons/md";
+import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const pathname = usePathname();
   const isEditingList = useMemo(() => pathname.includes("list"), [pathname]);
 
@@ -20,12 +24,35 @@ const Navbar = () => {
   const { data: list } = useGetList(listId);
 
   const { activate } = useContext(SidebarContext);
-  const activateOptionsPanel = usePanel({
-    title: "Options",
-    data: [
-      { label: "Close", action: () => {} },
-      { label: "Delete", action: () => {} },
-    ],
+  const activateOptionsPanel = usePanel(() => {
+    if (isEditingList)
+      return {
+        title: "Options",
+        data: [
+          {
+            label: "Close",
+            icon: <CloseIcon className="text-xl" />,
+            action: () => router.push("/"),
+          },
+          {
+            label: "Delete",
+            icon: <DeleteIcon className="text-xl" />,
+            action: () => {},
+            critical: true,
+          },
+        ],
+      };
+
+    return {
+      title: "Options",
+      data: [
+        {
+          label: "Close",
+          icon: <CloseIcon className="text-xl" />,
+          action: () => {},
+        },
+      ],
+    };
   });
 
   return (
@@ -37,7 +64,10 @@ const Navbar = () => {
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
       {isEditingList && <h1 className="text-lg">{list?.name}</h1>}
-      <button className="transition-opacity hover:opacity-70" onClick={activateOptionsPanel}>
+      <button
+        className="transition-opacity hover:opacity-70"
+        onClick={activateOptionsPanel}
+      >
         <OptionsIcon className="text-purple-600" />
       </button>
     </nav>
