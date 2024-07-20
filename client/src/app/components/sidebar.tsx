@@ -10,9 +10,10 @@ import {
   FaSortAmountDownAlt as SortIcon,
   FaRegTrashAlt as DeleteIcon,
 } from "react-icons/fa";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
 import usePanel from "../hooks/ui/usePanel";
+import useCurrentList from "../hooks/list/use-current-list";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
@@ -141,12 +142,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
   const { deactivate } = useContext(SidebarContext);
   const [isSelected, setSelected] = useState(false);
 
-  const pathname = usePathname();
-  const listId = useMemo(() => {
-    const idx = pathname.search("list/");
-    if (idx < 0) return "";
-    return pathname.substring(idx + "list/".length);
-  }, [pathname]);
+  const currentList = useCurrentList();
 
   const { mutate: deleteList } = useDeleteList();
   const activatePanel = usePanel({
@@ -157,7 +153,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
         icon: <DeleteIcon className="text-xl" />,
         action: () => {
           deleteList(id);
-          if (listId === id) router.push("/");
+          if (currentList?.id === id) router.push("/");
         },
         critical: true,
       },

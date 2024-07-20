@@ -1,44 +1,29 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useContext, useMemo } from "react";
+import { useContext } from "react";
 import { BiSidebar as SidebarIcon } from "react-icons/bi";
 import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
-import { useGetList } from "../list/[id]/_hooks";
 import { SidebarContext } from "../providers";
 import { MdClose as CloseIcon } from "react-icons/md";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
+import useCurrentList from "../hooks/list/use-current-list";
 
 const Navbar = () => {
   const router = useRouter();
-  const pathname = usePathname();
-  const isEditingList = useMemo(() => pathname.includes("list"), [pathname]);
-
-  const listId = useMemo(() => {
-    const idx = pathname.search("list/");
-    if (idx < 0) return "";
-    return pathname.substring(idx + "list/".length);
-  }, [pathname]);
-  const { data: list } = useGetList(listId);
+  const currentList = useCurrentList();
 
   const { activate } = useContext(SidebarContext);
   const activateOptionsPanel = usePanel(() => {
-    if (isEditingList)
+    if (!currentList)
       return {
         title: "Options",
         data: [
           {
             label: "Close",
             icon: <CloseIcon className="text-xl" />,
-            action: () => router.push("/"),
-          },
-          {
-            label: "Delete",
-            icon: <DeleteIcon className="text-xl" />,
             action: () => {},
-            critical: true,
           },
         ],
       };
@@ -49,7 +34,13 @@ const Navbar = () => {
         {
           label: "Close",
           icon: <CloseIcon className="text-xl" />,
+          action: () => router.push("/"),
+        },
+        {
+          label: "Delete",
+          icon: <DeleteIcon className="text-xl" />,
           action: () => {},
+          critical: true,
         },
       ],
     };
@@ -63,7 +54,7 @@ const Navbar = () => {
       >
         <SidebarIcon className="text-2xl text-purple-600" />
       </button>
-      {isEditingList && <h1 className="text-lg">{list?.name}</h1>}
+      {currentList && <h1 className="text-lg">{currentList.name}</h1>}
       <button
         className="transition-opacity hover:opacity-70"
         onClick={activateOptionsPanel}
