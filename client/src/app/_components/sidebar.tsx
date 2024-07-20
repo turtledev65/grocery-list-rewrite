@@ -2,7 +2,7 @@
 
 import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
 import { useCreateList, useGetAllLists } from "../_hooks";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
@@ -11,6 +11,10 @@ import { LuFilter as FilterIcon } from "react-icons/lu";
 import { FaSortAmountDownAlt as SortIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { usePanel } from "./panel";
+
+type SortOrder = "asc" | "desc";
+type SortType = "name" | "creationDate";
+type SortState = { type?: SortType; order: SortOrder };
 
 const Sidebar = () => {
   const { active, deactivate } = useContext(SidebarContext);
@@ -28,16 +32,46 @@ const Sidebar = () => {
     });
   }, [createList, router]);
 
+  const [sortState, setSortState] = useState<SortState>({ order: "asc" });
+  const sortedAllLists = useMemo(() => {
+    if (!allLists?.length) return;
+
+    const out = [...allLists];
+    if (sortState.type === "name")
+      out.sort((a, b) => a.name.localeCompare(b.name));
+    else if (sortState.type === "creationDate")
+      out.sort((a, b) => {
+        const date1 = new Date(a.creationDate).valueOf();
+        const date2 = new Date(b.creationDate).valueOf();
+        return date1 - date2;
+      });
+    if (sortState.order === "desc") out.reverse();
+
+    return out;
+  }, [allLists, sortState]);
+
   const activateSortPanel = usePanel({
     title: "Sort by",
     data: [
       [
-        { label: "List name (A to Z)", action: () => {} },
-        { label: "List name (Z to A)", action: () => {} },
+        {
+          label: "List name (A to Z)",
+          action: () => setSortState({ type: "name", order: "asc" }),
+        },
+        {
+          label: "List name (Z to A)",
+          action: () => setSortState({ type: "name", order: "desc" }),
+        },
       ],
       [
-        { label: "Creation Date (new to old)", action: () => {} },
-        { label: "Creation Date (old to new)", action: () => {} },
+        {
+          label: "Creation Date (new to old)",
+          action: () => setSortState({ type: "creationDate", order: "asc" }),
+        },
+        {
+          label: "Creation Date (old to new)",
+          action: () => setSortState({ type: "creationDate", order: "desc" }),
+        },
       ],
     ],
   });
@@ -69,7 +103,7 @@ const Sidebar = () => {
                 </button>
               </div>
               <div className="flex flex-col">
-                {allLists?.map(list => (
+                {sortedAllLists?.map(list => (
                   <Link
                     href={`/list/${list.id}`}
                     key={list.id}

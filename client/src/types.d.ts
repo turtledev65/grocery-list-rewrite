@@ -4,6 +4,7 @@ export type List = {
   id: string;
   name: string;
   items?: Item[];
+  creationDate: string;
 };
 
 export type Item = {
