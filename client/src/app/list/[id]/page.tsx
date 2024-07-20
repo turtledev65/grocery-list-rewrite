@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import { Item } from "./_components";
+import { FormEvent, useCallback, useRef, useState } from "react";
+import { AddButton, Item } from "./_components";
 import { useAddItem, useGetList } from "./_hooks";
 import { useSearchParams } from "next/navigation";
-import { useRenameList } from "@/app/_hooks";
 import { AnimatePresence, motion } from "framer-motion";
+import ListTitle from "./_components/list-title";
 
 type Props = {
   params: {
@@ -92,95 +85,6 @@ const ListPage = ({ params }: Props) => {
         onCreateTextItem={() => setCreating(true)}
       />
     </main>
-  );
-};
-
-const ListTitle = ({
-  title,
-  listId,
-  isNew,
-}: {
-  title: string;
-  listId: string;
-  isNew: boolean;
-}) => {
-  const formRef = useRef<HTMLFormElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const { mutate: renameList } = useRenameList(listId);
-  const handleRenameList = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      const newTitle = inputRef.current?.value.trim();
-      if (!newTitle || newTitle === title) return;
-
-      inputRef.current?.blur();
-      renameList(newTitle);
-    },
-    [renameList, title],
-  );
-
-  useEffect(() => {
-    if (isNew) inputRef?.current?.select();
-  }, []);
-
-  return (
-    <form onSubmit={handleRenameList} ref={formRef}>
-      <input
-        type="text"
-        defaultValue={title}
-        ref={inputRef}
-        onBlur={() => formRef.current?.reset()}
-        autoFocus={isNew}
-        className="w-full bg-gray-50 text-4xl font-bold outline-none selection:bg-purple-200"
-      />
-    </form>
-  );
-};
-
-const AddButton = ({
-  onCreateTextItem,
-  onCreateItemWithImages,
-}: {
-  onCreateTextItem: () => void;
-  onCreateItemWithImages: (files: File[]) => void;
-}) => {
-  const handleAttachImages = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const fileList = e.target.files;
-      if (!fileList) return;
-
-      const files: File[] = [];
-      for (let i = 0; i < fileList.length; i++) files.push(fileList[i]);
-      console.log(files);
-
-      onCreateItemWithImages(files);
-    },
-    [onCreateItemWithImages],
-  );
-
-  return (
-    <div className="group fixed bottom-5 right-9 flex select-none flex-col gap-2 rounded-3xl text-4xl text-white transition-colors hover:bg-purple-900">
-      <div className="grid h-0 w-12 place-items-center rounded-full bg-purple-600 outline-none transition-all group-hover:h-12">
-        <input
-          type="file"
-          id="images"
-          accept="image/*"
-          hidden
-          onChange={handleAttachImages}
-        />
-        <label htmlFor="images" className="invisible group-hover:visible">
-          C
-        </label>
-      </div>
-
-      <button
-        onClick={onCreateTextItem}
-        className="h-12 w-12 rounded-full bg-purple-600 outline-none"
-      >
-        +
-      </button>
-    </div>
   );
 };
 
