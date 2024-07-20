@@ -1,14 +1,17 @@
 "use client";
 
 import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
-import { useCreateList, useGetAllLists } from "../_hooks";
-import { useCallback, useContext, useMemo, useState } from "react";
+import { useCreateList, useDeleteList, useGetAllLists } from "../_hooks";
+import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { FiEdit as CreateListIcon } from "react-icons/fi";
 import { LuFilter as FilterIcon } from "react-icons/lu";
-import { FaSortAmountDownAlt as SortIcon } from "react-icons/fa";
+import {
+  FaSortAmountDownAlt as SortIcon,
+  FaRegTrashAlt as DeleteIcon,
+} from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { usePanel } from "./panel";
 
@@ -104,14 +107,7 @@ const Sidebar = () => {
               </div>
               <div className="flex flex-col">
                 {sortedAllLists?.map(list => (
-                  <Link
-                    href={`/list/${list.id}`}
-                    key={list.id}
-                    onClick={deactivate}
-                    className="rounded-lg px-6 py-1 text-start text-lg hover:bg-gray-200 focus:bg-purple-600 focus:text-white"
-                  >
-                    {list.name}
-                  </Link>
+                  <ListButton id={list.id} name={list.name} key={list.id} />
                 ))}
               </div>
             </div>
@@ -136,6 +132,52 @@ const Sidebar = () => {
         </>
       )}
     </AnimatePresence>
+  );
+};
+
+const ListButton = ({ id, name }: { id: string; name: string }) => {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const router = useRouter();
+  const { deactivate } = useContext(SidebarContext);
+  const [isSelected, setSelected] = useState(false);
+
+  const { mutate: deleteList } = useDeleteList();
+  const activatePanel = usePanel({
+    title: name,
+    data: [
+      {
+        label: "Delete",
+        icon: <DeleteIcon className="text-xl" />,
+        action: () => deleteList(id),
+        critical: true,
+      },
+    ],
+  });
+
+  return (
+    <button
+      onClick={() => {
+        if (isSelected) return;
+        router.push(`/list/${id}`);
+        deactivate();
+      }}
+      onMouseDown={() => {
+        const timeoutId = setTimeout(() => {
+          setSelected(true);
+          activatePanel();
+        }, 1200);
+        timeoutRef.current = timeoutId;
+      }}
+      onMouseUp={() => {
+        clearTimeout(timeoutRef.current);
+        setSelected(false);
+      }}
+      onBlur={() => setSelected(false)}
+      className={`select-none rounded-lg px-6 py-1 text-start text-lg transition-colors hover:bg-gray-200 ${isSelected && "bg-purple-600 text-white"}`}
+    >
+      {name}
+    </button>
   );
 };
 

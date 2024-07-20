@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { socket } from "@/socket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -14,15 +14,10 @@ const useDeleteList = () => {
     },
     onMutate: async listId => {
       await queryClient.cancelQueries({ queryKey: ["all-lists"] });
-      const prev = queryClient.getQueryData<List[]>(["all-lists"]);
       queryClient.setQueryData<List[]>(["all-lists"], old => {
         if (!old) return;
         return old.filter(list => list.id !== listId);
       });
-      return { prev };
-    },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData<List[]>(["all-lists"], context?.prev);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["all-lists"] });

@@ -74,6 +74,7 @@ export const Panel = () => {
                     label={item.label}
                     action={item.action}
                     critical={item.critical}
+                    className={item.className}
                     key={item.label}
                   />
                 ))}
@@ -131,9 +132,9 @@ const PanelButton = ({
   return (
     <button
       onClick={() => {
+        deactivate();
         if (critical) activateConfirmationPanel();
         else action();
-        deactivate();
       }}
       className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 ${className}`}
     >
