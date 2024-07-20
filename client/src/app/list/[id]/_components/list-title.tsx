@@ -1,6 +1,6 @@
 "use client";
 
-import { useRenameList } from "@/app/_hooks";
+import { useRenameList } from "@/app/hooks/list";
 import { FormEvent, useCallback, useEffect, useRef } from "react";
 
 const ListTitle = ({

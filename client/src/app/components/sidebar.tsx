@@ -1,7 +1,6 @@
 "use client";
 
 import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
-import { useCreateList, useDeleteList, useGetAllLists } from "../_hooks";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
@@ -13,6 +12,7 @@ import {
 } from "react-icons/fa";
 import { usePathname, useRouter } from "next/navigation";
 import { usePanel } from "./panel";
+import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
