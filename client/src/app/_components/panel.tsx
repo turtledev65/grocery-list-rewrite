@@ -12,14 +12,22 @@ function isPanelSection(
   return false;
 }
 
-export const usePanel = (args: {
+type UsePanelData = PanelSection | PanelSection[];
+type UsePanelArgs = {
   title?: string;
-  data: PanelSection | PanelSection[];
-}) => {
+  data: UsePanelData;
+};
+export const usePanel = (args: UsePanelArgs | (() => UsePanelArgs)) => {
+  let res: UsePanelArgs;
+  if (typeof args === "function") res = args();
+  else res = args;
+
+  const { title, data } = res;
+
   const { activate, setTitle, setData } = useContext(PanelContext);
   return () => {
-    setTitle(args.title);
-    setData(args.data);
+    setTitle(title);
+    setData(data);
     activate();
   };
 };
@@ -123,9 +131,9 @@ const PanelButton = ({
   return (
     <button
       onClick={() => {
-        deactivate();
         if (critical) activateConfirmationPanel();
         else action();
+        deactivate();
       }}
       className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 ${className}`}
     >
