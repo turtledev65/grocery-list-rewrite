@@ -2,7 +2,6 @@
 
 import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
-import { SidebarContext } from "../providers";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiEdit as CreateListIcon } from "react-icons/fi";
 import { LuFilter as FilterIcon } from "react-icons/lu";
@@ -14,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
+import { SidebarContext } from "../providers/sidebar-provider";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";

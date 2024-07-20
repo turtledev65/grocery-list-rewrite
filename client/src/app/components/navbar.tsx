@@ -3,12 +3,12 @@
 import { useContext } from "react";
 import { BiSidebar as SidebarIcon } from "react-icons/bi";
 import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
-import { SidebarContext } from "../providers";
 import { MdClose as CloseIcon } from "react-icons/md";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
+import { SidebarContext } from "../providers/sidebar-provider";
 
 const Navbar = () => {
   const router = useRouter();
