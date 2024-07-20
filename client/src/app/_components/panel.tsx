@@ -61,13 +61,13 @@ export const Panel = () => {
             {isPanelSection(data) ? (
               <div className="flex flex-col py-2">
                 {data.map(item => (
-                  <button
-                    onClick={item.action}
+                  <PanelButton
+                    icon={item.icon}
+                    label={item.label}
+                    action={item.action}
+                    critical={item.critical}
                     key={item.label}
-                    className="rounded-md p-2 text-left hover:bg-gray-200"
-                  >
-                    {item.label}
-                  </button>
+                  />
                 ))}
               </div>
             ) : (
@@ -77,16 +77,14 @@ export const Panel = () => {
                   className={`flex flex-col border-b-gray-400 py-2 ${idx !== data.length - 1 && "border-b-2"}`}
                 >
                   {section.map(item => (
-                    <button
-                      onClick={() => {
-                        item.action();
-                        deactivate();
-                      }}
+                    <PanelButton
+                      icon={item.icon}
+                      label={item.label}
+                      action={item.action}
+                      critical={item.critical}
+                      className={item.className}
                       key={item.label}
-                      className="rounded-md p-2 text-left hover:bg-gray-200"
-                    >
-                      {item.label}
-                    </button>
+                    />
                   ))}
                 </section>
               ))
@@ -95,5 +93,44 @@ export const Panel = () => {
         </>
       )}
     </AnimatePresence>
+  );
+};
+
+const PanelButton = ({
+  icon,
+  label,
+  action,
+  critical,
+  className,
+}: PanelItem) => {
+  const { deactivate } = useContext(PanelContext);
+
+  const activateConfirmationPanel = usePanel({
+    title: label,
+    data: [
+      [
+        {
+          label: "Confirm and don't ask again",
+          className: "text-red-500",
+          action: action,
+        },
+        { label: "Confirm", className: "text-red-500", action: action },
+      ],
+      [{ label: "Close", className: "text-purple-600", action: deactivate }],
+    ],
+  });
+
+  return (
+    <button
+      onClick={() => {
+        deactivate();
+        if (critical) activateConfirmationPanel();
+        else action();
+      }}
+      className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 ${className}`}
+    >
+      {icon}
+      {label}
+    </button>
   );
 };
