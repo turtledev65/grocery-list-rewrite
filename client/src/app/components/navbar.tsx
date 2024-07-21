@@ -34,7 +34,7 @@ const Navbar = () => {
         {
           label: "Close",
           icon: <CloseIcon className="text-xl" />,
-          action: () => router.push("/"),
+          action: () => router.push("/home"),
         },
         {
           label: "Delete",
