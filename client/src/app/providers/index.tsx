@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-query";
 import PanelProvider from "./panel-provider";
 import SidebarProvider from "./sidebar-provider";
+import LastOpeendListProvider from "./last-opened-list-provider";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -40,7 +41,9 @@ const Providers = ({ children }: PropsWithChildren) => {
   return (
     <QueryClientProvider client={queryClient}>
       <PanelProvider>
-        <SidebarProvider>{children}</SidebarProvider>
+        <SidebarProvider>
+          <LastOpeendListProvider>{children}</LastOpeendListProvider>
+        </SidebarProvider>
       </PanelProvider>
     </QueryClientProvider>
   );
