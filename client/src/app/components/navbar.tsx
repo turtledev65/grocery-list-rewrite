@@ -9,10 +9,13 @@ import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
+import { useDeleteList } from "../hooks/list";
 
 const Navbar = () => {
   const router = useRouter();
+
   const currentList = useCurrentList();
+  const { mutate: deleteList } = useDeleteList();
 
   const { activate } = useContext(SidebarContext);
   const activateOptionsPanel = usePanel(() => {
@@ -39,7 +42,10 @@ const Navbar = () => {
         {
           label: "Delete",
           icon: <DeleteIcon className="text-xl" />,
-          action: () => {},
+          action: () => {
+            deleteList(currentList.id);
+            router.push("/home");
+          },
           critical: true,
         },
       ],
