@@ -4,6 +4,6 @@
 
 @layer base {
   html {
-    @apply overflow-hidden bg-gray-50 selection:bg-purple-200;
+    @apply overflow-hidden bg-gray-50 selection:bg-purple-200 dark:bg-zinc-900 dark:text-gray-50 dark:selection:bg-purple-400;
   }
 }

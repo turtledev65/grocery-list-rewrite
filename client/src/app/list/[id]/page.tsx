@@ -75,7 +75,7 @@ const ListPage = ({ params }: Props) => {
               autoFocus
               onBlur={() => setCreating(false)}
               ref={itemTextRef}
-              className="w-full outline-none"
+              className="w-full bg-gray-50 outline-none dark:bg-zinc-900"
             />
           </motion.form>
         )}

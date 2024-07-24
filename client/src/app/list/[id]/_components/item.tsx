@@ -52,7 +52,7 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
               setEditing(false);
               formRef?.current?.reset();
             }}
-            className={`${pending ? "text-gray-500" : "text-black"} w-full bg-gray-50`}
+            className={`${pending ? "text-gray-500" : "text-black"} w-full bg-gray-50 dark:bg-zinc-900 dark:text-gray-50`}
           />
         </form>
       </SwipeableContainer>
@@ -74,7 +74,7 @@ const SwipeableContainer = ({
   return (
     <div className="relative">
       <motion.div
-        className="absolute inset-[0.6px] -z-10 flex flex-row justify-end items-center bg-red-500 font-bold text-white"
+        className="absolute inset-[0.6px] -z-10 flex flex-row items-center justify-end bg-red-500 font-bold text-white"
         exit={{
           translateX: "-100%",
           transition: { delay: 0.15, duration: 0.1 },

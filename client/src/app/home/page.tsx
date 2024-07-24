@@ -19,11 +19,11 @@ const HomePage = () => {
               },
             })
           }
-          className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400"
+          className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400 dark:bg-zinc-800"
         >
           Create new list
         </button>
-        <button className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400">
+        <button className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 hover:text-purple-400 dark:bg-zinc-800">
           Close
         </button>
       </div>

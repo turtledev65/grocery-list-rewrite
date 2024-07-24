@@ -40,7 +40,7 @@ export const Panel = () => {
             initial={{ bottom: "-100%" }}
             animate={{ bottom: 0, transition: { delay: 0.1 } }}
             exit={{ bottom: "-100%" }}
-            className="absolute bottom-0 z-50 w-full rounded-t-xl bg-gray-50 p-2"
+            className="absolute bottom-0 z-50 w-full rounded-t-xl bg-gray-50 p-2 dark:bg-zinc-800"
           >
             <div className="mx-auto h-1 w-16 rounded-lg bg-gray-400" />
             {title && (
@@ -122,7 +122,7 @@ const PanelButton = ({
         if (critical && settings?.askToConfirm) activateConfirmationPanel();
         else action();
       }}
-      className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 ${className}`}
+      className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 dark:hover:bg-zinc-700 ${className}`}
     >
       {icon}
       {label}

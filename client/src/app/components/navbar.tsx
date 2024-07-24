@@ -53,7 +53,7 @@ const Navbar = () => {
   });
 
   return (
-    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-2">
+    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-2 dark:bg-zinc-900">
       <button
         onClick={activate}
         className="transition-opacity hover:opacity-70"
