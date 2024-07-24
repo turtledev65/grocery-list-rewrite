@@ -9,6 +9,7 @@ import {
 import PanelProvider from "./panel-provider";
 import SidebarProvider from "./sidebar-provider";
 import LastOpeendListProvider from "./last-opened-list-provider";
+import SettingsProvider from "./settings-provider";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -40,11 +41,13 @@ const Providers = ({ children }: PropsWithChildren) => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PanelProvider>
-        <SidebarProvider>
-          <LastOpeendListProvider>{children}</LastOpeendListProvider>
-        </SidebarProvider>
-      </PanelProvider>
+      <SettingsProvider>
+        <PanelProvider>
+          <SidebarProvider>
+            <LastOpeendListProvider>{children}</LastOpeendListProvider>
+          </SidebarProvider>
+        </PanelProvider>
+      </SettingsProvider>
     </QueryClientProvider>
   );
 };

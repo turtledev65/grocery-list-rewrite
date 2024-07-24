@@ -30,3 +30,7 @@ export type PanelItem = {
   action: () => void;
 };
 export type PanelSection = PanelItem[];
+
+type Settings = {
+  askToConfirm: boolean;
+}
