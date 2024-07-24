@@ -160,6 +160,18 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
     ],
   });
 
+  const handleTouchStart = () => {
+    const timeoutId = setTimeout(() => {
+      setSelected(true);
+      activatePanel();
+    }, 1200);
+    timeoutRef.current = timeoutId;
+  };
+
+  const handleTouchEnd = () => {
+    clearTimeout(timeoutRef.current);
+  };
+
   return (
     <button
       onClick={() => {
@@ -167,19 +179,12 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
         router.push(`/list/${id}`);
         deactivate();
       }}
-      onMouseDown={() => {
-        const timeoutId = setTimeout(() => {
-          setSelected(true);
-          activatePanel();
-        }, 1200);
-        timeoutRef.current = timeoutId;
-      }}
-      onMouseUp={() => {
-        clearTimeout(timeoutRef.current);
-        setSelected(false);
-      }}
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       onBlur={() => setSelected(false)}
-      className={`select-none rounded-lg px-6 py-1 text-start text-lg transition-colors hover:bg-gray-200 ${isSelected && "bg-purple-600 text-white"}`}
+      className={`select-none rounded-lg px-6 py-1 text-start text-lg transition-colors ${isSelected ? "bg-purple-600 text-white" : "active:bg-gray-200"}`}
     >
       {name}
     </button>
