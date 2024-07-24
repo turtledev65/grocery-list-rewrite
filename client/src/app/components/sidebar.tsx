@@ -14,6 +14,7 @@ import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
+import cn from "classnames";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
@@ -96,7 +97,7 @@ const Sidebar = () => {
             initial={{ left: "-75vw" }}
             animate={{ left: 0, transition: { delay: 0.1 } }}
             exit={{ left: "-75vw" }}
-            className={`fixed bottom-0 top-0 z-30 flex w-[75vw] flex-col justify-between rounded-r-xl bg-gray-50 p-4 dark:bg-zinc-800`}
+            className="fixed bottom-0 top-0 z-30 flex w-[75vw] flex-col justify-between rounded-r-xl bg-gray-50 p-4 dark:bg-zinc-800"
           >
             <div>
               <div className="flex items-center justify-between py-4">
@@ -184,7 +185,13 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onBlur={() => setSelected(false)}
-      className={`select-none rounded-lg px-6 py-1 text-start text-lg transition-colors ${isSelected ? "bg-purple-600 text-white" : "active:bg-gray-200 dark:active:bg-zinc-700"}`}
+      className={cn(
+        "select-none rounded-lg px-6 py-1 text-start text-lg transition-colors",
+        {
+          "bg-purple-600 text-white": isSelected,
+          "active:bg-gray-200 dark:active:bg-zinc-700": !isSelected,
+        },
+      )}
     >
       {name}
     </button>

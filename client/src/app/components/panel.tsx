@@ -6,6 +6,7 @@ import { PanelItem, PanelSection } from "@/types";
 import usePanel from "../hooks/ui/usePanel";
 import { PanelContext } from "../providers/panel-provider";
 import { SettingsContext } from "../providers/settings-provider";
+import cn from "classnames";
 
 function isPanelSection(
   val: PanelSection | PanelSection[],
@@ -65,7 +66,9 @@ export const Panel = () => {
               data.map((section, idx) => (
                 <section
                   key={idx}
-                  className={`flex flex-col border-b-gray-400 py-2 ${idx !== data.length - 1 && "border-b-2"}`}
+                  className={cn("flex flex-col border-b-gray-400 py-2", {
+                    "border-b-2": idx !== data.length - 1,
+                  })}
                 >
                   {section.map(item => (
                     <PanelButton
@@ -122,7 +125,13 @@ const PanelButton = ({
         if (critical && settings?.askToConfirm) activateConfirmationPanel();
         else action();
       }}
-      className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 dark:hover:bg-zinc-700 ${className}`}
+      className={cn(
+        "flex items-center gap-2 rounded-md p-2 text-left hover:bg-gray-200 dark:hover:bg-zinc-700",
+        className,
+        {
+          "text-red-500": critical,
+        },
+      )}
     >
       {icon}
       {label}

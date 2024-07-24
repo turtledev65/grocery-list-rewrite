@@ -11,6 +11,7 @@ import {
 import { useDeleteItem, useEditItem } from "../_hooks";
 import { motion } from "framer-motion";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
+import cn from "classnames";
 
 const Item = ({ id, listId, text, pending, images }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -52,7 +53,10 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
               setEditing(false);
               formRef?.current?.reset();
             }}
-            className={`${pending ? "text-gray-500" : "text-black"} w-full bg-gray-50 dark:bg-zinc-900 dark:text-gray-50`}
+            className={cn(
+              `w-full bg-gray-50 dark:bg-zinc-900 dark:text-gray-50`,
+              pending ? "text-gray-500" : "text-black",
+            )}
           />
         </form>
       </SwipeableContainer>
@@ -102,7 +106,10 @@ const SwipeableContainer = ({
 const Image = ({ url, pending }: ImageProps) => {
   return (
     <div className="w-full">
-      <img src={url} className={`${pending && "grayscale filter"} max-w-sm`} />
+      <img
+        src={url}
+        className={cn("max-w-sm", pending && "grayscale filter")}
+      />
       {pending && (
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <svg
