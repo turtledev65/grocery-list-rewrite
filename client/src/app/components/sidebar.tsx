@@ -103,7 +103,7 @@ const Sidebar = () => {
               <div className="flex items-center justify-between py-4">
                 <h1 className="text-nowrap text-2xl font-bold">All Lists</h1>
                 <button className="grid place-items-center transition-opacity hover:opacity-70">
-                  <SettingsIcon className="text-2xl text-purple-600" />
+                  <SettingsIcon className="text-3xl text-purple-600" />
                 </button>
               </div>
               <div className="flex flex-col">

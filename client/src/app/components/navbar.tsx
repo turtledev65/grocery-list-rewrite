@@ -53,19 +53,21 @@ const Navbar = () => {
   });
 
   return (
-    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-2 dark:bg-zinc-900">
+    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 px-4 py-2 text-purple-600 dark:bg-zinc-900">
       <button
         onClick={activate}
-        className="transition-opacity hover:opacity-70"
+        className="text-2xl transition-opacity hover:opacity-70"
       >
-        <SidebarIcon className="text-2xl text-purple-600" />
+        <SidebarIcon />
       </button>
-      {currentList && <h1 className="text-lg">{currentList.name}</h1>}
+      {currentList && (
+        <h1 className="text-xl text-black">{currentList.name}</h1>
+      )}
       <button
-        className="transition-opacity hover:opacity-70"
+        className="text-2xl transition-opacity hover:opacity-70"
         onClick={activateOptionsPanel}
       >
-        <OptionsIcon className="text-purple-600" />
+        <OptionsIcon />
       </button>
     </nav>
   );
