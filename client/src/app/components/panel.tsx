@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { PanelItem, PanelSection } from "@/types";
 import usePanel from "../hooks/ui/usePanel";
 import { PanelContext } from "../providers/panel-provider";
+import { SettingsContext } from "../providers/settings-provider";
 
 function isPanelSection(
   val: PanelSection | PanelSection[],
@@ -94,6 +95,7 @@ const PanelButton = ({
   className,
 }: PanelItem) => {
   const { deactivate } = useContext(PanelContext);
+  const { settings, updateSettings } = useContext(SettingsContext);
 
   const activateConfirmationPanel = usePanel({
     title: label,
@@ -102,9 +104,12 @@ const PanelButton = ({
         {
           label: "Confirm and don't ask again",
           className: "text-red-500",
-          action: action,
+          action: () => {
+            updateSettings({ askToConfirm: false });
+            action();
+          },
         },
-        { label: "Confirm", className: "text-red-500", action: action },
+        { label: "Confirm", className: "text-red-500", action },
       ],
       [{ label: "Close", className: "text-purple-600", action: deactivate }],
     ],
@@ -114,7 +119,7 @@ const PanelButton = ({
     <button
       onClick={() => {
         deactivate();
-        if (critical) activateConfirmationPanel();
+        if (critical && settings?.askToConfirm) activateConfirmationPanel();
         else action();
       }}
       className={`flex items-center gap-2 rounded-md p-2 ${critical && "text-red-500"} text-left hover:bg-gray-200 ${className}`}
