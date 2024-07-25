@@ -6,7 +6,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { FiEdit as CreateListIcon } from "react-icons/fi";
 import { LuFilter as FilterIcon } from "react-icons/lu";
 import {
-  FaSortAmountDownAlt as SortIcon,
+  FaSortAmountDown as SortDescIcon,
+  FaSortAmountUp as SortAscIcon,
   FaRegTrashAlt as DeleteIcon,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
@@ -132,7 +133,11 @@ const Sidebar = () => {
                 className="transition-opacity hover:opacity-70"
                 onClick={activateSortPanel}
               >
-                <SortIcon />
+                {sortState.order === "desc" ? (
+                  <SortDescIcon />
+                ) : (
+                  <SortAscIcon />
+                )}
               </button>
               <button className="transition-opacity hover:opacity-70">
                 <FilterIcon />
