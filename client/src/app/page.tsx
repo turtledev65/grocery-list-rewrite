@@ -11,5 +11,5 @@ export default function Home() {
   useEffect(() => {
     if (lastOpenedList) router.push(`/list/${lastOpenedList.id}`);
     else router.push("/home");
-  }, [lastOpenedList]);
+  }, [router, lastOpenedList]);
 }

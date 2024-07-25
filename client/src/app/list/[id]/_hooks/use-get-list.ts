@@ -15,7 +15,7 @@ const useGetList = (id: string) => {
     return () => {
       socket.off("list-updated");
     };
-  }, []);
+  }, [queryClient]);
 
   const query = useQuery({
     queryKey: [id],

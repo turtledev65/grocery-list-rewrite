@@ -34,7 +34,7 @@ const Sidebar = () => {
         deactivate();
       },
     });
-  }, [createList, router]);
+  }, [createList, router, deactivate]);
 
   const [sortState, setSortState] = useState<SortState>({ order: "asc" });
   const sortedAllLists = useMemo(() => {

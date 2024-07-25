@@ -30,7 +30,7 @@ const ListTitle = ({
 
   useEffect(() => {
     if (isNew) inputRef?.current?.select();
-  }, []);
+  }, [isNew]);
 
   return (
     <form onSubmit={handleRenameList} ref={formRef}>

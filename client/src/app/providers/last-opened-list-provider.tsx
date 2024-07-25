@@ -23,7 +23,7 @@ const LastOpeendListProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     if (pathname === "/") return;
     setLastOpenedList(currentList);
-  }, [pathname, currentList]);
+  }, [pathname, setLastOpenedList, currentList]);
 
   return (
     <LastOpenedListContext.Provider value={{ lastOpenedList }}>
