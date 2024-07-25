@@ -61,7 +61,9 @@ const Navbar = () => {
         <SidebarIcon />
       </button>
       {currentList && (
-        <h1 className="text-xl text-black">{currentList.name}</h1>
+        <h1 className="text-xl text-black dark:text-white">
+          {currentList.name}
+        </h1>
       )}
       <button
         className="text-2xl transition-opacity hover:opacity-70"
