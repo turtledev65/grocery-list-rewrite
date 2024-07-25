@@ -1,6 +1,8 @@
-"use client"
+"use client";
 
-import { ChangeEvent, useCallback } from "react";
+import { ChangeEvent, useCallback, useRef, useState } from "react";
+import { FaPlus as PlusIcon, FaCamera as CameraIcon } from "react-icons/fa";
+import cn from "classnames";
 
 type Props = {
   onCreateTextItem: () => void;
@@ -21,27 +23,52 @@ const AddButton = ({ onCreateTextItem, onCreateItemWithImages }: Props) => {
     [onCreateItemWithImages],
   );
 
-  return (
-    <div className="group fixed bottom-5 right-9 flex select-none flex-col gap-2 rounded-3xl text-4xl text-white transition-colors hover:bg-purple-900">
-      <div className="grid h-0 w-12 place-items-center rounded-full bg-purple-600 outline-none transition-all group-hover:h-12">
-        <input
-          type="file"
-          id="images"
-          accept="image/*"
-          hidden
-          onChange={handleAttachImages}
-        />
-        <label htmlFor="images" className="invisible group-hover:visible">
-          C
-        </label>
-      </div>
+  const [isCamera, setIsCamera] = useState(false);
 
-      <button
-        onClick={onCreateTextItem}
-        className="h-12 w-12 rounded-full bg-purple-600 outline-none"
-      >
-        +
-      </button>
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+  const handleTouchStart = useCallback(() => {
+    const timeoutId = setTimeout(() => setIsCamera(prev => !prev), 700);
+    timeoutRef.current = timeoutId;
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    clearTimeout(timeoutRef.current);
+    if (isCamera) fileInputRef.current?.click();
+    else onCreateTextItem();
+  }, [isCamera, onCreateTextItem]);
+
+  return (
+    <div
+      className={cn(
+        "absolute bottom-4 right-4 h-16 w-16 cursor-pointer rounded-full border-4 border-purple-600 p-3 text-3xl transition-all active:opacity-80",
+        isCamera ? "bg-purple-600 text-white" : "text-purple-600",
+      )}
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      {isCamera ? (
+        <>
+          <input
+            type="file"
+            id="images"
+            accept="image/*"
+            hidden
+            onChange={handleAttachImages}
+            ref={fileInputRef}
+          />
+          <label htmlFor="images" className="cursor-pointer">
+            <CameraIcon />
+          </label>
+        </>
+      ) : (
+        <button onClick={onCreateTextItem} className="outline-none">
+          <PlusIcon />
+        </button>
+      )}
     </div>
   );
 };
