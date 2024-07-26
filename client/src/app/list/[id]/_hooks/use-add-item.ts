@@ -2,7 +2,7 @@
 
 import { useUploadThing } from "@/app/api/uploadthing/core";
 import { socket } from "@/socket";
-import { Item, List, Image } from "@/types";
+import { Item, List } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRef } from "react";
 
@@ -28,52 +28,51 @@ const useAddItem = (listId: string) => {
       if ("error" in res) throw new Error(res.error);
       return res;
     },
-    onMutate: async args => {
-      await queryClient.cancelQueries({ queryKey: [listId] });
-
-      const { text } = args;
+    onMutate: args => {
       itemIdRef.current = crypto.randomUUID();
+      queryClient.setQueryData<List>([listId], old => {
+        if (!old) return;
+        if (old.items === undefined) return;
+
+        const newItem = {
+          listId: listId,
+          id: itemIdRef.current,
+          text: args.text,
+          images: args.imageFiles,
+          pending: true,
+        } as Item;
+        return {
+          ...old,
+          items: [...old.items, newItem],
+        };
+      });
+    },
+    onError: error => {
+      console.error(error);
 
       queryClient.setQueryData<List>([listId], old => {
         if (!old) return;
+        if (old.items === undefined) return;
 
-        const oldItems = old.items ?? [];
-        const images = args.imageFiles?.map(
-          (file, idx) =>
-            ({
-              url: URL.createObjectURL(file),
-              id: String(idx),
-              pending: true,
-            }) as Image,
-        );
-        const newItem: Item = {
-          id: itemIdRef.current,
-          listId: listId,
-          text,
-          images: images,
-          pending: true,
+        return {
+          ...old,
+          items: old.items.filter(item => item.id !== itemIdRef.current),
         };
-
-        return { ...old, items: [...oldItems, newItem] } as List;
       });
     },
     onSuccess: res => {
       queryClient.setQueryData<List>([listId], old => {
         if (!old) return;
+        if (old.items === undefined) return;
 
-        const newItems = [...(old.items ?? [])];
-        const idx = newItems.findIndex(i => i.id === itemIdRef.current);
+        const newItems = [...old.items];
+        const idx = newItems.findIndex(item => item.id === itemIdRef.current);
+        if (idx < 0) return;
         newItems[idx] = res;
 
-        return { ...old, items: newItems };
-      });
-    },
-    onError: () => {
-      queryClient.setQueryData<List>([listId], old => {
-        if (!old) return;
         return {
           ...old,
-          items: old.items?.filter(item => item.id !== itemIdRef.current),
+          items: newItems,
         };
       });
     },

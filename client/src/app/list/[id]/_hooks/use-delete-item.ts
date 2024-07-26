@@ -1,3 +1,5 @@
+"use client"
+
 import { socket } from "@/socket";
 import { List } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -10,20 +12,31 @@ const useDeleteItem = (listId: string) => {
       if ("error" in res) throw new Error(res.error);
       return res;
     },
-    onMutate: async itemId => {
-      await queryClient.cancelQueries({ queryKey: [listId] });
-      const prevList = queryClient.getQueryData<List>([listId]);
+    onMutate: itemId => {
+      const list = queryClient.getQueryData<List>([listId]);
+      if (list?.items === undefined) return;
+
+      const idx = list.items.findIndex(item => item.id === itemId);
+      if (idx === undefined || idx < 0) return;
+      const item = list?.items[idx];
+
       queryClient.setQueryData<List>([listId], old => {
-        if (!old) return;
-        return { ...old, items: old.items?.filter(item => item.id !== itemId) };
+        if (!old || old.items === undefined) return;
+        return { ...old, items: old.items.filter(item => item.id !== itemId) };
       });
-      return { prevList };
+
+      return { idx, item };
     },
-    onError: (_error, _variables, context) => {
-      queryClient.setQueryData<List>([listId], context?.prevList);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: [listId] });
+    onError: (error, _args, context) => {
+      console.error(error);
+      queryClient.setQueryData<List>([listId], old => {
+        if (!old || old.items === undefined) return;
+        if (!context) return;
+
+        const newItems = [...old.items];
+        newItems.splice(context.idx, 0, context.item);
+        return { ...old, items: newItems };
+      });
     },
   });
 
