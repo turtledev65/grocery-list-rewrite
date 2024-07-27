@@ -13,6 +13,7 @@
     "@tanstack/react-query-devtools": "^5.50.1",
     "@uploadthing/react": "^6.7.2",
     "classnames": "^2.5.1",
+    "convex": "^1.13.2",
     "framer-motion": "^11.3.2",
     "next": "14.2.4",
     "react": "^18",

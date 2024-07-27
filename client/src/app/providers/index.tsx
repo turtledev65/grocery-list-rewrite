@@ -10,6 +10,7 @@ import PanelProvider from "./panel-provider";
 import SidebarProvider from "./sidebar-provider";
 import LastOpeendListProvider from "./last-opened-list-provider";
 import SettingsProvider from "./settings-provider";
+import ConvexClientProvider from "./convex-provider";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -40,15 +41,17 @@ const Providers = ({ children }: PropsWithChildren) => {
   const queryClient = getQueryClient();
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <SettingsProvider>
-        <PanelProvider>
-          <SidebarProvider>
-            <LastOpeendListProvider>{children}</LastOpeendListProvider>
-          </SidebarProvider>
-        </PanelProvider>
-      </SettingsProvider>
-    </QueryClientProvider>
+    <ConvexClientProvider>
+      <QueryClientProvider client={queryClient}>
+        <SettingsProvider>
+          <PanelProvider>
+            <SidebarProvider>
+              <LastOpeendListProvider>{children}</LastOpeendListProvider>
+            </SidebarProvider>
+          </PanelProvider>
+        </SettingsProvider>
+      </QueryClientProvider>
+    </ConvexClientProvider>
   );
 };
 export default Providers;
