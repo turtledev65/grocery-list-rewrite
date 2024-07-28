@@ -2,11 +2,15 @@
 
 import { PropsWithChildren } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateList } from "../hooks/list";
+import { useMutation } from "@tanstack/react-query";
+import { useConvexMutation } from "@convex-dev/react-query";
+import { api } from "../../../convex/_generated/api";
 
 const HomePage = () => {
   const router = useRouter();
-  const { mutate: createList } = useCreateList();
+  const { mutate: createList } = useMutation({
+    mutationFn: useConvexMutation(api.list.createList),
+  });
 
   return (
     <main className="flex h-full flex-col items-center justify-center">
@@ -14,11 +18,14 @@ const HomePage = () => {
       <div className="flex flex-col gap-4 align-baseline">
         <Button
           onClick={() =>
-            createList("Untilted", {
-              onSuccess: res => {
-                router.push(`/list/${res.id}?new=true`);
+            createList(
+              { name: "Untilted" },
+              {
+                onSuccess: id => {
+                  router.push(`/list/${id}?new=true`);
+                },
               },
-            })
+            )
           }
         >
           Create new list
