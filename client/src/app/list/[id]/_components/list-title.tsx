@@ -1,7 +1,9 @@
 "use client";
 
-import { useRenameList } from "@/app/hooks/list";
+import { useMutation } from "convex/react";
 import { FormEvent, useCallback, useEffect, useRef } from "react";
+import { api } from "../../../../../convex/_generated/api";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
 const ListTitle = ({
   title,
@@ -15,15 +17,15 @@ const ListTitle = ({
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: renameList } = useRenameList(listId);
+  const renameList = useMutation(api.list.renameList);
   const handleRenameList = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const newTitle = inputRef.current?.value.trim();
-      if (!newTitle || newTitle === title) return;
+      const newName = inputRef.current?.value.trim();
+      if (!newName || newName === title) return;
 
       inputRef.current?.blur();
-      renameList(newTitle);
+      renameList({ id: listId as Id<"list">, newName });
     },
     [renameList, title],
   );
