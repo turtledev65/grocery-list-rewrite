@@ -9,7 +9,7 @@ export default function Home() {
   const { lastOpenedList } = useContext(LastOpenedListContext);
 
   useEffect(() => {
-    if (lastOpenedList) router.push(`/list/${lastOpenedList.id}`);
+    if (lastOpenedList) router.push(`/list/${lastOpenedList._id}`);
     else router.push("/home");
   }, [router, lastOpenedList]);
 }

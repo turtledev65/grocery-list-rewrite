@@ -34,9 +34,9 @@ const ListPage = ({ params }: Props) => {
       if (!text) return;
       if (!list) return;
 
-      addItem({ text, listId: list._id });
+      addItem({ text, listId: list._id }).then(res => console.log(res));
     },
-    [addItem],
+    [addItem, list],
   );
 
   return (
@@ -53,7 +53,6 @@ const ListPage = ({ params }: Props) => {
               text={item.text}
               pending={false}
               id={item._id}
-              listId={item.listId}
               key={item._id}
             />
           ))}

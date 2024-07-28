@@ -1,6 +1,6 @@
 "use client";
 
-import { Item as ItemProps, Image as ImageProps } from "@/types";
+import { Image as ImageProps } from "@/types";
 import {
   FormEvent,
   PropsWithChildren,
@@ -15,7 +15,12 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
-const Item = ({ id, listId, text, pending, images }: ItemProps) => {
+type ItemProps = {
+  id: string;
+  text: string;
+  pending: boolean;
+};
+const Item = ({ id, text, pending }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -1,19 +1,9 @@
 import { ReactNode } from "react";
+import schema from "../convex/schema";
+import { Doc } from "../convex/_generated/dataModel";
 
-export type List = {
-  id: string;
-  name: string;
-  items?: Item[];
-  creationDate: string;
-};
-
-export type Item = {
-  id: string;
-  listId: string;
-  text?: string;
-  images?: Image[];
-  pending?: boolean;
-};
+export type List = Doc<"list"> & { items?: Item[] };
+export type Item = Doc<"item"> & {pending?: boolean};
 
 export type Image = {
   id: string;
@@ -33,4 +23,4 @@ export type PanelSection = PanelItem[];
 
 type Settings = {
   askToConfirm: boolean;
-}
+};
