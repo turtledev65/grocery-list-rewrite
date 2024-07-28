@@ -1,8 +1,10 @@
 "use client";
 
+import { useQuery } from "convex/react";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { useGetList } from "@/app/list/[id]/_hooks";
+import { api } from "../../../../convex/_generated/api";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 const useCurrentList = () => {
   const pathname = usePathname();
@@ -12,7 +14,7 @@ const useCurrentList = () => {
     return pathname.substring(idx + "list/".length);
   }, [pathname]);
 
-  const { data: list } = useGetList(listId);
+  const list = useQuery(api.list.getList, { id: listId as Id<"list"> });
   return list;
 };
 
