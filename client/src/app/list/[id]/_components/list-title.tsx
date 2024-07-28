@@ -17,7 +17,19 @@ const ListTitle = ({
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const renameList = useMutation(api.list.renameList);
+  const renameList = useMutation(api.list.renameList).withOptimisticUpdate(
+    (localStore, args) => {
+      const { newName, id } = args;
+      const currVal = localStore.getQuery(api.list.getList, { id });
+      if (!currVal) return;
+
+      localStore.setQuery(
+        api.list.getList,
+        { id },
+        { ...currVal, name: newName },
+      );
+    },
+  );
   const handleRenameList = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
