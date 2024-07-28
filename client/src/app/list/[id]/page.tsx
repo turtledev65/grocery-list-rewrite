@@ -34,7 +34,7 @@ const ListPage = ({ params }: Props) => {
       if (!text) return;
       if (!list) return;
 
-      addItem({ text, listId: list._id }).then(res => console.log(res));
+      addItem({ text, listId: list._id });
     },
     [addItem, list],
   );
