@@ -7,10 +7,10 @@ import { MdClose as CloseIcon } from "react-icons/md";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
-import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import { useCurrentList } from "../hooks/list";
 
 const Navbar = () => {
   const router = useRouter();

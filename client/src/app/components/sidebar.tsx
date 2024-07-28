@@ -12,12 +12,12 @@ import {
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
-import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
 import cn from "classnames";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
+import { useCurrentList } from "../hooks/list";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
