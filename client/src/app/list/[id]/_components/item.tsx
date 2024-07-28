@@ -8,10 +8,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { useDeleteItem, useEditItem } from "../_hooks";
 import { motion } from "framer-motion";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import cn from "classnames";
+import { useMutation } from "convex/react";
+import { api } from "../../../../../convex/_generated/api";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
 const Item = ({ id, listId, text, pending, images }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -19,8 +21,8 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
 
   const [editing, setEditing] = useState(false);
 
-  const { mutate: deleteItem } = useDeleteItem(listId);
-  const { mutate: editItem } = useEditItem(listId);
+  const deleteItem = useMutation(api.item.deleteItem);
+  const editItem = useMutation(api.item.editItem);
 
   const handleEditItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
@@ -29,13 +31,13 @@ const Item = ({ id, listId, text, pending, images }: ItemProps) => {
       if (!newText || newText === text) return;
 
       inputRef?.current?.blur();
-      editItem({ newText, id });
+      editItem({ id: id as Id<"item">, newText });
     },
     [editItem, text, id],
   );
 
   const handleDeleteItem = useCallback(() => {
-    deleteItem(id);
+    deleteItem({ id: id as Id<"item"> });
   }, [deleteItem, id]);
 
   return (
