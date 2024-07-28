@@ -11,11 +11,13 @@ import {
   FaRegTrashAlt as DeleteIcon,
 } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import { useCreateList, useDeleteList, useGetAllLists } from "../hooks/list";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
 import cn from "classnames";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { Id } from "../../../convex/_generated/dataModel";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
@@ -24,18 +26,16 @@ type SortState = { type?: SortType; order: SortOrder };
 const Sidebar = () => {
   const { active, deactivate } = useContext(SidebarContext);
 
-  const { data: allLists } = useGetAllLists();
-  const { mutate: createList } = useCreateList();
+  const allLists = useQuery(api.list.getAllLists);
+  const createList = useMutation(api.list.createList);
 
   const router = useRouter();
   const handleCreateList = useCallback(() => {
-    createList("Untilted", {
-      onSuccess: res => {
-        router.push(`/list/${res.id}?new=true`);
-        deactivate();
-      },
+    createList({ name: "Untilted" }).then(id => {
+      router.push(`/list/${id}?new=true`);
+      deactivate();
     });
-  }, [createList, router, deactivate]);
+  }, [router, deactivate]);
 
   const [sortState, setSortState] = useState<SortState>({ order: "asc" });
   const sortedAllLists = useMemo(() => {
@@ -46,8 +46,8 @@ const Sidebar = () => {
       out.sort((a, b) => a.name.localeCompare(b.name));
     else if (sortState.type === "creationDate")
       out.sort((a, b) => {
-        const date1 = new Date(a.creationDate).valueOf();
-        const date2 = new Date(b.creationDate).valueOf();
+        const date1 = new Date(a._creationTime).valueOf();
+        const date2 = new Date(b._creationTime).valueOf();
         return date1 - date2;
       });
     if (sortState.order === "desc") out.reverse();
@@ -118,7 +118,7 @@ const Sidebar = () => {
               </div>
               <div className="flex flex-col">
                 {sortedAllLists?.map(list => (
-                  <ListButton id={list.id} name={list.name} key={list.id} />
+                  <ListButton id={list._id} name={list.name} key={list._id} />
                 ))}
               </div>
             </div>
@@ -159,7 +159,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
 
   const currentList = useCurrentList();
 
-  const { mutate: deleteList } = useDeleteList();
+  const deleteList = useMutation(api.list.deleteList);
   const activatePanel = usePanel({
     title: name,
     data: [
@@ -167,7 +167,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
         label: "Delete",
         icon: <DeleteIcon className="text-xl" />,
         action: () => {
-          deleteList(id);
+          deleteList({ id: id as Id<"list"> });
           if (currentList?.id === id) router.push("/home");
         },
         critical: true,
