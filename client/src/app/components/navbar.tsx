@@ -9,13 +9,14 @@ import { useRouter } from "next/navigation";
 import usePanel from "../hooks/ui/usePanel";
 import useCurrentList from "../hooks/list/use-current-list";
 import { SidebarContext } from "../providers/sidebar-provider";
-import { useDeleteList } from "../hooks/list";
+import { useMutation } from "convex/react";
+import { api } from "../../../convex/_generated/api";
 
 const Navbar = () => {
   const router = useRouter();
 
   const currentList = useCurrentList();
-  const { mutate: deleteList } = useDeleteList();
+  const deleteList = useMutation(api.list.deleteList);
 
   const { activate } = useContext(SidebarContext);
   const activateOptionsPanel = usePanel(() => {
@@ -43,7 +44,7 @@ const Navbar = () => {
           label: "Delete",
           icon: <DeleteIcon className="text-xl" />,
           action: () => {
-            deleteList(currentList.id);
+            deleteList({ id: currentList._id });
             router.push("/home");
           },
           critical: true,
