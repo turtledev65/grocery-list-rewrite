@@ -168,7 +168,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
         icon: <DeleteIcon className="text-xl" />,
         action: () => {
           deleteList({ id: id as Id<"list"> });
-          if (currentList?.id === id) router.push("/home");
+          if (currentList?._id === id) router.push("/home");
         },
         critical: true,
       },
