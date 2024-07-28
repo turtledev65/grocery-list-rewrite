@@ -2,10 +2,12 @@
 
 import { FormEvent, useCallback, useRef, useState } from "react";
 import { AddButton, Item } from "./_components";
-import { useAddItem, useGetList } from "./_hooks";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import ListTitle from "./_components/list-title";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../../convex/_generated/api";
+import { Id } from "../../../../convex/_generated/dataModel";
 
 type Props = {
   params: {
@@ -17,10 +19,10 @@ const ListPage = ({ params }: Props) => {
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new")?.toLowerCase() === "true";
 
-  const { data: list, status, error } = useGetList(params.id);
+  const list = useQuery(api.list.getList, { id: params.id as Id<"list"> });
 
   const itemTextRef = useRef<HTMLInputElement>(null);
-  const { mutate: addItem } = useAddItem(params.id);
+  const addItem = useMutation(api.item.addItem);
 
   const [creating, setCreating] = useState(false);
   const handleAddItem = useCallback(
@@ -30,35 +32,29 @@ const ListPage = ({ params }: Props) => {
 
       const text = itemTextRef.current?.value.trim();
       if (!text) return;
+      if (!list) return;
 
-      addItem({ text });
+      addItem({ text, listId: list._id });
     },
     [addItem],
   );
 
-  if (status === "error")
-    return (
-      <>
-        <h1 className="text-4xl font-bold text-red-500">Error</h1>
-        <p className="text-red-500">{error.message}</p>
-      </>
-    );
-
-  if (status === "pending") return <p className="text-lg">Loading...</p>;
-
   return (
     <main className="overflow-y-auto overflow-x-hidden p-4">
-      <ListTitle title={list!.name} listId={list!.id} isNew={isNew} />
+      <ListTitle
+        title={list?.name ?? ""}
+        listId={list?._id ?? ""}
+        isNew={isNew}
+      />
       <ul>
         <AnimatePresence>
           {list?.items?.map(item => (
             <Item
               text={item.text}
-              images={item.images}
-              pending={item.pending}
-              id={item.id}
+              pending={false}
+              id={item._id}
               listId={item.listId}
-              key={item.id}
+              key={item._id}
             />
           ))}
         </AnimatePresence>
@@ -81,7 +77,7 @@ const ListPage = ({ params }: Props) => {
         )}
       </ul>
       <AddButton
-        onCreateItemWithImages={imageFiles => addItem({ imageFiles })}
+        onCreateItemWithImages={imageFiles => console.log(imageFiles)}
         onCreateTextItem={() => setCreating(true)}
       />
     </main>
