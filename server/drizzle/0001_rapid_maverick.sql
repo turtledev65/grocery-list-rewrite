@@ -1,1 +1,0 @@
-ALTER TABLE "item" ADD COLUMN "creationDate" timestamp DEFAULT now() NOT NULL;
