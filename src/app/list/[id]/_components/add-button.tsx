@@ -1,28 +1,20 @@
 "use client";
 
-import { ChangeEvent, useCallback, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useContext, useRef, useState } from "react";
 import { FaPlus as PlusIcon, FaCamera as CameraIcon } from "react-icons/fa";
 import cn from "classnames";
+import { NewItemContex } from "./new-item-provider";
 
-type Props = {
-  onCreateTextItem: () => void;
-  onCreateItemWithImages: (files: File[]) => void;
-};
-const AddButton = ({ onCreateTextItem, onCreateItemWithImages }: Props) => {
-  const handleAttachImages = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const fileList = e.target.files;
-      if (!fileList) return;
+const AddButton = () => {
+  const handleAttachImages = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList) return;
 
-      const files: File[] = [];
-      for (let i = 0; i < fileList.length; i++) files.push(fileList[i]);
-      console.log(files);
+    const files: File[] = [];
+    for (let i = 0; i < fileList.length; i++) files.push(fileList[i]);
+  }, []);
 
-      onCreateItemWithImages(files);
-    },
-    [onCreateItemWithImages],
-  );
-
+  const { setNewItemActive } = useContext(NewItemContex);
   const [isCamera, setIsCamera] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -36,8 +28,8 @@ const AddButton = ({ onCreateTextItem, onCreateItemWithImages }: Props) => {
   const handleTouchEnd = useCallback(() => {
     clearTimeout(timeoutRef.current);
     if (isCamera) fileInputRef.current?.click();
-    else onCreateTextItem();
-  }, [isCamera, onCreateTextItem]);
+    else setNewItemActive(true);
+  }, [isCamera]);
 
   return (
     <div
@@ -65,7 +57,7 @@ const AddButton = ({ onCreateTextItem, onCreateItemWithImages }: Props) => {
           </label>
         </>
       ) : (
-        <button onClick={onCreateTextItem} className="outline-none">
+        <button onClick={() => setNewItemActive(true)} className="outline-none">
           <PlusIcon />
         </button>
       )}
