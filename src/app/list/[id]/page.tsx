@@ -52,6 +52,7 @@ const ListPage = ({ params }: Props) => {
             <Item
               text={item.text}
               pending={false}
+              listId={item.listId}
               id={item._id}
               key={item._id}
             />

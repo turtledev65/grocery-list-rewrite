@@ -11,22 +11,33 @@ import {
 import { motion } from "framer-motion";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import cn from "classnames";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
 type ItemProps = {
   id: string;
+  listId: string;
   text: string;
   pending: boolean;
 };
-const Item = ({ id, text, pending }: ItemProps) => {
+const Item = ({ id, listId, text, pending }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [editing, setEditing] = useState(false);
 
-  const deleteItem = useMutation(api.item.deleteItem);
+  const deleteItem = useMutation(api.item.deleteItem).withOptimisticUpdate(
+    (localStore, args) => {
+      const currVal = localStore.getQuery(api.list.getList, {
+        id: listId as Id<"lists">,
+      });
+      if (!currVal) return;
+
+      const newItems = currVal.items.filter(i => i._id !== args.id);
+      localStore.setQuery(api.list.getList, {id: listId as Id<"lists">}, {...currVal, items: newItems})
+    },
+  );
   const editItem = useMutation(api.item.editItem);
 
   const handleEditItem = useCallback(
