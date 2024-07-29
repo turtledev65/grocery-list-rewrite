@@ -1,13 +1,15 @@
 "use client";
 
-import { FormEvent, useCallback, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { AddButton, Item } from "./_components";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import ListTitle from "./_components/list-title";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { convexQuery, useConvexMutation } from "@convex-dev/react-query";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
+import cn from "classnames";
 
 type Props = {
   params: {
@@ -19,22 +21,34 @@ const ListPage = ({ params }: Props) => {
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new")?.toLowerCase() === "true";
 
-  const list = useQuery(api.list.getList, { id: params.id as Id<"lists"> });
+  const { data: list } = useQuery(
+    convexQuery(api.list.getList, {
+      id: params.id as Id<"lists">,
+    }),
+  );
 
   const itemTextRef = useRef<HTMLInputElement>(null);
-  const addItem = useMutation(api.item.addItem);
+  const { mutate: addItem, isPending: isAddingItem } = useMutation({
+    mutationFn: useConvexMutation(api.item.addItem),
+  });
+
+  useEffect(() => {
+    if (isAddingItem) itemTextRef.current?.blur();
+  }, [isAddingItem]);
 
   const [creating, setCreating] = useState(false);
   const handleAddItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      setCreating(false);
 
       const text = itemTextRef.current?.value.trim();
       if (!text) return;
       if (!list) return;
 
-      addItem({ text, listId: list._id });
+      addItem(
+        { text, listId: list._id },
+        { onSuccess: () => setCreating(false) },
+      );
     },
     [addItem, list],
   );
@@ -69,9 +83,14 @@ const ListPage = ({ params }: Props) => {
           >
             <input
               autoFocus
-              onBlur={() => setCreating(false)}
+              onBlur={() => {
+                if (!isAddingItem) setCreating(false);
+              }}
               ref={itemTextRef}
-              className="w-full bg-gray-50 outline-none dark:bg-zinc-900"
+              className={cn(
+                "w-full bg-gray-50 outline-none dark:bg-zinc-900",
+                isAddingItem && "text-gray-500",
+              )}
             />
           </motion.form>
         )}
