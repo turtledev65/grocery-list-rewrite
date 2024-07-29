@@ -1,13 +1,14 @@
-import { defineSchema, defineTable } from "convex/server";
+import { defineEnt, defineEntSchema, getEntDefinitions } from "convex-ents";
 import { v } from "convex/values";
 
-export default defineSchema({
-  list: defineTable({
+const schema = defineEntSchema({
+  lists: defineEnt({
     name: v.string(),
-  }),
-
-  item: defineTable({
-    listId: v.id("list"),
+  }).edges("items", { ref: "listId" }),
+  items: defineEnt({
     text: v.string(),
-  }),
+  }).edge("list", { field: "listId" }),
 });
+export default schema;
+
+export const entDefinitions = getEntDefinitions(schema);

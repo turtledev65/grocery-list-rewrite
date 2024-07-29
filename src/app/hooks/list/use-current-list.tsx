@@ -16,7 +16,7 @@ const useCurrentList = () => {
   }, [pathname]);
 
   const { data: list } = useQuery(
-    convexQuery(api.list.getList, { id: listId as Id<"list"> }),
+    convexQuery(api.list.getList, { id: listId as Id<"lists"> }),
   );
   return list;
 };

@@ -1,31 +1,41 @@
 import { ConvexError, v } from "convex/values";
-import { mutation } from "./_generated/server";
+import { mutation, query } from "./functions";
+
+export const getItem = query({
+  args: { id: v.id("items") },
+  handler: async (ctx, args) => {
+    return await ctx.table("items").getX(args.id);
+  },
+});
 
 export const addItem = mutation({
-  args: { listId: v.id("list"), text: v.string() },
+  args: { listId: v.id("lists"), text: v.string() },
   handler: async (ctx, args) => {
-    const list = await ctx.db.get(args.listId);
+    const list = await ctx.table("lists").get(args.listId);
     if (!list) throw new ConvexError(`Could not find list ${args.listId}`);
 
-    const res = await ctx.db.insert("item", {
-      listId: args.listId,
-      text: args.text,
-    });
+    const res = await ctx
+      .table("items")
+      .insert({
+        listId: args.listId,
+        text: args.text,
+      })
+      .get();
     return res;
   },
 });
 
 export const deleteItem = mutation({
-  args: { id: v.id("item") },
+  args: { id: v.id("items") },
   handler: async (ctx, args) => {
-    await ctx.db.delete(args.id);
+    await ctx.table("items").getX(args.id).delete();
   },
 });
 
 export const editItem = mutation({
-  args: { id: v.id("item"), newText: v.string() },
+  args: { id: v.id("items"), newText: v.string() },
   handler: async (ctx, args) => {
-    const item = await ctx.db.get(args.id);
+    const item = await ctx.table("items").get(args.id);
 
     if (!item) throw new ConvexError(`Failed to find item ${args.id}`);
     const text = args.newText.trim();
@@ -33,6 +43,6 @@ export const editItem = mutation({
     if (item.text === text)
       throw new ConvexError(`Nothing has changed in ${text}`);
 
-    await ctx.db.patch(args.id, { text: args.newText });
+    await ctx.table("items").getX(args.id).patch({ text: args.newText });
   },
 });

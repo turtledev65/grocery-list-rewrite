@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
 import schema from "../convex/schema";
+import { Ent, EntWriter } from "../convex/types";
 import { Doc } from "../convex/_generated/dataModel";
 
-export type List = Doc<"list"> & { items?: Item[] };
-export type Item = Doc<"item"> & {pending?: boolean};
+export type List = Doc<"lists"> & { items?: Item[] };
+export type Item = EntWriter<"items"> & { pending?: boolean };
 
 export type Image = {
   id: string;

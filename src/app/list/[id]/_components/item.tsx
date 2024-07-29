@@ -36,13 +36,13 @@ const Item = ({ id, text, pending }: ItemProps) => {
       if (!newText || newText === text) return;
 
       inputRef?.current?.blur();
-      editItem({ id: id as Id<"item">, newText });
+      editItem({ id: id as Id<"items">, newText });
     },
     [editItem, text, id],
   );
 
   const handleDeleteItem = useCallback(() => {
-    deleteItem({ id: id as Id<"item"> });
+    deleteItem({ id: id as Id<"items"> });
   }, [deleteItem, id]);
 
   return (

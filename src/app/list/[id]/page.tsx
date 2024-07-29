@@ -6,8 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import ListTitle from "./_components/list-title";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
+import { api } from "../../../../convex/_generated/api";
 
 type Props = {
   params: {
@@ -19,7 +19,7 @@ const ListPage = ({ params }: Props) => {
   const searchParams = useSearchParams();
   const isNew = searchParams.get("new")?.toLowerCase() === "true";
 
-  const list = useQuery(api.list.getList, { id: params.id as Id<"list"> });
+  const list = useQuery(api.list.getList, { id: params.id as Id<"lists"> });
 
   const itemTextRef = useRef<HTMLInputElement>(null);
   const addItem = useMutation(api.item.addItem);

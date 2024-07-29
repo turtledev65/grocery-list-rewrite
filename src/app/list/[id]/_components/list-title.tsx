@@ -37,7 +37,7 @@ const ListTitle = ({
       if (!newName || newName === title) return;
 
       inputRef.current?.blur();
-      renameList({ id: listId as Id<"list">, newName });
+      renameList({ id: listId as Id<"lists">, newName });
     },
     [renameList, title],
   );
