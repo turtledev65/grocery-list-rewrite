@@ -11,7 +11,7 @@ import {
 import { motion } from "framer-motion";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import cn from "classnames";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
@@ -35,10 +35,32 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
       if (!currVal) return;
 
       const newItems = currVal.items.filter(i => i._id !== args.id);
-      localStore.setQuery(api.list.getList, {id: listId as Id<"lists">}, {...currVal, items: newItems})
+      localStore.setQuery(
+        api.list.getList,
+        { id: listId as Id<"lists"> },
+        { ...currVal, items: newItems },
+      );
     },
   );
-  const editItem = useMutation(api.item.editItem);
+  const editItem = useMutation(api.item.editItem).withOptimisticUpdate(
+    (localStore, args) => {
+      const currList = localStore.getQuery(api.list.getList, {
+        id: listId as Id<"lists">,
+      });
+      if (!currList) return;
+
+      const newItems = [...currList.items];
+      const item = newItems.find(i => i._id === args.id);
+      if (!item) return;
+      item.text = args.newText;
+
+      localStore.setQuery(
+        api.list.getList,
+        { id: listId as Id<"lists"> },
+        { ...currList, items: newItems },
+      );
+    },
+  );
 
   const handleEditItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
