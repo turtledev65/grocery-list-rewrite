@@ -1,20 +1,16 @@
 import { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { useConvexMutation } from "@convex-dev/react-query";
 import { NewItemContex } from "./new-item-provider";
-import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
 import { motion } from "framer-motion";
+import { useAddItem } from "../_hooks";
 import cn from "classnames";
 
 const NewItemForm = ({ listId }: { listId: string }) => {
-  const { isNewItemActive , setNewItemActive  } = useContext(NewItemContex);
+  const { isNewItemActive, setNewItemActive } = useContext(NewItemContex);
 
   const itemTextRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: addItem, isPending: isAddingItem } = useMutation({
-    mutationFn: useConvexMutation(api.item.addItem),
-  });
+  const { mutate: addItem, isPending: isAddingItem } = useAddItem(listId);
   const handleAddItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
