@@ -6,7 +6,7 @@ const schema = defineEntSchema({
     name: v.string(),
   }).edges("items", { ref: "listId" }),
   items: defineEnt({
-    text: v.string(),
+    text: v.optional(v.string()),
   })
     .edge("list", { field: "listId" })
     .edge("image", { ref: "itemId", optional: true }),

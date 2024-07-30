@@ -18,7 +18,7 @@ import cn from "classnames";
 type ItemProps = {
   id: string;
   listId: string;
-  text: string;
+  text?: string;
 };
 const Item = ({ id, listId, text }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);

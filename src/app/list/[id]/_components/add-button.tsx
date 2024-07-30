@@ -44,7 +44,6 @@ const AddButton = ({ listId }: { listId: string }) => {
       const res = await jsonVal.json();
 
       addItem({
-        text: "image",
         listId: listId as Id<"lists">,
         image: {
           storageId: res.storageId,
