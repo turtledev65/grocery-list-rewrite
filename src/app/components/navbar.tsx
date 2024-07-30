@@ -54,7 +54,7 @@ const Navbar = () => {
   });
 
   return (
-    <nav className="sticky top-0 z-10 flex w-full items-center justify-between bg-gray-50 p-4 text-purple-600 dark:bg-zinc-900">
+    <nav className="sticky top-0 z-10 flex gap-3 w-full items-center justify-between bg-gray-50 p-4 text-purple-600 dark:bg-zinc-900">
       <button
         onClick={activate}
         className="text-2xl transition-opacity hover:opacity-70"
@@ -62,7 +62,7 @@ const Navbar = () => {
         <SidebarIcon />
       </button>
       {currentList && (
-        <h1 className="text-xl text-black dark:text-white">
+        <h1 className="overflow-hidden overflow-ellipsis text-nowrap text-center text-xl text-black dark:text-white">
           {currentList.name}
         </h1>
       )}
