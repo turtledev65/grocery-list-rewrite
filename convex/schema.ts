@@ -7,7 +7,15 @@ const schema = defineEntSchema({
   }).edges("items", { ref: "listId" }),
   items: defineEnt({
     text: v.string(),
-  }).edge("list", { field: "listId" }),
+  })
+    .edge("list", { field: "listId" })
+    .edge("image", { ref: "itemId", optional: true }),
+  images: defineEnt({ name: v.string(), storageId: v.id("_storage") }).edge(
+    "item",
+    {
+      field: "itemId",
+    },
+  ),
 });
 export default schema;
 

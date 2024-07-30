@@ -12,7 +12,8 @@ export const getList = query({
   handler: async (ctx, args) => {
     const list = await ctx.table("lists").get(args.id);
     if (!list) return;
-    const items = await list?.edge("items");
+
+    const items = await list.edge("items");
 
     return { ...list, items };
   },

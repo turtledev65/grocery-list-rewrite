@@ -9,7 +9,13 @@ export const getItem = query({
 });
 
 export const addItem = mutation({
-  args: { listId: v.id("lists"), text: v.string() },
+  args: {
+    listId: v.id("lists"),
+    text: v.string(),
+    image: v.optional(
+      v.object({ storageId: v.id("_storage"), name: v.string() }),
+    ),
+  },
   handler: async (ctx, args) => {
     const list = await ctx.table("lists").get(args.listId);
     if (!list) throw new ConvexError(`Could not find list ${args.listId}`);
@@ -21,6 +27,16 @@ export const addItem = mutation({
         text: args.text,
       })
       .get();
+
+    if (args.image)
+      await ctx
+        .table("images")
+        .insert({
+          storageId: args.image.storageId,
+          name: args.image.name,
+          itemId: res._id,
+        });
+
     return res;
   },
 });
