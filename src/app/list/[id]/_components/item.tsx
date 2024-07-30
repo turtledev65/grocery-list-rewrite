@@ -19,16 +19,15 @@ type ItemProps = {
   id: string;
   listId: string;
   text: string;
-  pending: boolean;
 };
-const Item = ({ id, listId, text, pending }: ItemProps) => {
+const Item = ({ id, listId, text }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [editing, setEditing] = useState(false);
 
   const { mutate: deleteItem } = useDeleteItem(listId);
-  const { mutate: editItem } = useEditItem(listId);
+  const { mutate: editItem, isPending } = useEditItem(listId);
 
   const handleEditItem = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -53,7 +52,7 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
   return (
     <motion.li layout transition={{ type: "spring" }}>
       <SwipeableContainer
-        draggable={!editing && !pending}
+        draggable={!editing && !isPending}
         onSwipe={handleDeleteItem}
       >
         <form ref={formRef} onSubmit={handleEditItem}>
@@ -67,7 +66,7 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
             }}
             className={cn(
               `w-full bg-gray-50 dark:bg-zinc-900 dark:text-gray-50`,
-              pending ? "text-gray-500" : "text-black",
+              isPending ? "text-gray-500" : "text-black",
             )}
           />
         </form>

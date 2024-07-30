@@ -39,7 +39,6 @@ const ListPage = ({ params }: Props) => {
           {list?.items?.map(item => (
             <Item
               text={item.text}
-              pending={false}
               listId={item.listId}
               id={item._id}
               key={item._id}
