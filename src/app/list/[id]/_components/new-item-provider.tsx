@@ -16,8 +16,14 @@ export const NewItemContex = createContext<NewItemContextType>(
 
 const NewItemProvider = ({ children }: PropsWithChildren) => {
   const [isNewItemActive, setNewItemActive] = useState(false);
+
   return (
-    <NewItemContex.Provider value={{ isNewItemActive: isNewItemActive, setNewItemActive: setNewItemActive }}>
+    <NewItemContex.Provider
+      value={{
+        isNewItemActive,
+        setNewItemActive,
+      }}
+    >
       {children}
     </NewItemContex.Provider>
   );

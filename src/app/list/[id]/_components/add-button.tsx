@@ -4,16 +4,12 @@ import { ChangeEvent, useCallback, useContext, useRef, useState } from "react";
 import { FaPlus as PlusIcon, FaCamera as CameraIcon } from "react-icons/fa";
 import cn from "classnames";
 import { NewItemContex } from "./new-item-provider";
+import { useMutation } from "convex/react";
+import { api } from "../../../../../convex/_generated/api";
+import { useAddItem } from "../_hooks";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
-const AddButton = () => {
-  const handleAttachImages = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const fileList = e.target.files;
-    if (!fileList) return;
-
-    const files: File[] = [];
-    for (let i = 0; i < fileList.length; i++) files.push(fileList[i]);
-  }, []);
-
+const AddButton = ({ listId }: { listId: string }) => {
   const { setNewItemActive } = useContext(NewItemContex);
   const [isCamera, setIsCamera] = useState(false);
 
@@ -30,6 +26,34 @@ const AddButton = () => {
     if (isCamera) fileInputRef.current?.click();
     else setNewItemActive(true);
   }, [isCamera]);
+
+  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
+  const { mutate: addItem } = useAddItem();
+  const handleAttachImages = useCallback(
+    async (e: ChangeEvent<HTMLInputElement>) => {
+      const fileList = e.target.files;
+      if (!fileList || fileList.length === 0) return;
+      const file = fileList[0];
+
+      const postUrl = await generateUploadUrl();
+      const jsonVal = await fetch(postUrl, {
+        method: "POST",
+        headers: { "Content-Type": "image/*" },
+        body: file,
+      });
+      const res = await jsonVal.json();
+
+      addItem({
+        text: "image",
+        listId: listId as Id<"lists">,
+        image: {
+          storageId: res.storageId,
+          name: file.name,
+        },
+      });
+    },
+    [listId],
+  );
 
   return (
     <div

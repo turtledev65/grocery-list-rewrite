@@ -1,3 +1,5 @@
+"use client";
+
 import { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
 import { NewItemContex } from "./new-item-provider";
 import { Id } from "../../../../../convex/_generated/dataModel";
@@ -12,7 +14,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
 
   const { mutate: addItem, isPending: isAddingItem } = useAddItem();
   const handleAddItem = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       const text = itemTextRef.current?.value.trim();

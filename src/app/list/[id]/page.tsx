@@ -49,7 +49,7 @@ const ListPage = ({ params }: Props) => {
 
       <NewItemProvider>
         <NewItemForm listId={list?._id ?? ""} />
-        <AddButton />
+        <AddButton listId={list?._id ?? ""} />
       </NewItemProvider>
     </main>
   );
