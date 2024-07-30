@@ -65,7 +65,7 @@ const Item = ({ id, listId, text }: ItemProps) => {
               formRef?.current?.reset();
             }}
             className={cn(
-              `w-full bg-gray-50 dark:bg-zinc-900 dark:text-gray-50`,
+              `w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900 dark:text-gray-50`,
               isPending ? "text-gray-500" : "text-black",
             )}
           />

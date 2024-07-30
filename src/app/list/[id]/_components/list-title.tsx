@@ -54,7 +54,7 @@ const ListTitle = ({
         ref={inputRef}
         onBlur={() => formRef.current?.reset()}
         autoFocus={isNew}
-        className="w-full bg-gray-50 text-4xl font-bold outline-none dark:bg-zinc-900"
+        className="w-full bg-gray-50 px-2 pb-4 text-4xl font-bold outline-none dark:bg-zinc-900"
       />
     </form>
   );
