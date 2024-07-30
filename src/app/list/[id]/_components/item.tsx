@@ -5,6 +5,7 @@ import {
   FormEvent,
   PropsWithChildren,
   useCallback,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -14,6 +15,7 @@ import cn from "classnames";
 import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
+import { Ent } from "../../../../../convex/types";
 
 type ItemProps = {
   id: string;
@@ -50,9 +52,9 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
       if (!currList) return;
 
       const newItems = [...currList.items];
-      const item = newItems.find(i => i._id === args.id);
-      if (!item) return;
-      item.text = args.newText;
+      const itemIdx = newItems.findIndex(i => i._id === args.id);
+      if (itemIdx < 0) return;
+      newItems[itemIdx] = { ...newItems[itemIdx], text: args.newText } as Ent<"items">;
 
       localStore.setQuery(
         api.list.getList,
@@ -63,13 +65,13 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
   );
 
   const handleEditItem = useCallback(
-    (e: FormEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const newText = inputRef.current?.value.trim();
       if (!newText || newText === text) return;
 
       inputRef?.current?.blur();
-      editItem({ id: id as Id<"items">, newText });
+      await editItem({ id: id as Id<"items">, newText });
     },
     [editItem, text, id],
   );
@@ -77,6 +79,10 @@ const Item = ({ id, listId, text, pending }: ItemProps) => {
   const handleDeleteItem = useCallback(() => {
     deleteItem({ id: id as Id<"items"> });
   }, [deleteItem, id]);
+
+  useEffect(() => {
+    formRef?.current?.reset();
+  }, [text]);
 
   return (
     <motion.li layout transition={{ type: "spring" }}>
