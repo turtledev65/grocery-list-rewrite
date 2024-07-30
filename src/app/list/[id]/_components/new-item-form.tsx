@@ -10,7 +10,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
 
   const itemTextRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: addItem, isPending: isAddingItem } = useAddItem(listId);
+  const { mutate: addItem, isPending: isAddingItem } = useAddItem();
   const handleAddItem = useCallback(
     (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
