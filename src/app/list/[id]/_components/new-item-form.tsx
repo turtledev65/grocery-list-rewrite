@@ -49,7 +49,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
           }}
           ref={itemTextRef}
           className={cn(
-            "w-full bg-gray-50 outline-none dark:bg-zinc-900",
+            "w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900",
             isAddingItem && "text-gray-500",
           )}
         />
