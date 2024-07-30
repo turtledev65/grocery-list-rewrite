@@ -13,7 +13,22 @@ export const getList = query({
     const list = await ctx.table("lists").get(args.id);
     if (!list) return;
 
-    const items = await list.edge("items");
+    const items = await list.edge("items").map(async item => {
+      const out = { ...item };
+
+      const imageEnt = await item.edge("image");
+      let image: { url: string; name: string } | undefined = undefined;
+      if (imageEnt) {
+        const url = await ctx.storage.getUrl(imageEnt.storageId);
+        if (url)
+          image = {
+            url,
+            name: imageEnt.name,
+          };
+      }
+
+      return { ...out, image };
+    });
 
     return { ...list, items };
   },

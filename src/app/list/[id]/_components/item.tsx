@@ -19,8 +19,9 @@ type ItemProps = {
   id: string;
   listId: string;
   text?: string;
+  image?: { url: string; name: string };
 };
-const Item = ({ id, listId, text }: ItemProps) => {
+const Item = ({ id, listId, text, image }: ItemProps) => {
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -55,21 +56,24 @@ const Item = ({ id, listId, text }: ItemProps) => {
         draggable={!editing && !isPending}
         onSwipe={handleDeleteItem}
       >
-        <form ref={formRef} onSubmit={handleEditItem}>
-          <input
-            defaultValue={text}
-            ref={inputRef}
-            onFocus={() => setEditing(true)}
-            onBlur={() => {
-              setEditing(false);
-              formRef?.current?.reset();
-            }}
-            className={cn(
-              `w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900 dark:text-gray-50`,
-              isPending ? "text-gray-500" : "text-black",
-            )}
-          />
-        </form>
+        {text !== undefined && (
+          <form ref={formRef} onSubmit={handleEditItem}>
+            <input
+              defaultValue={text}
+              ref={inputRef}
+              onFocus={() => setEditing(true)}
+              onBlur={() => {
+                setEditing(false);
+                formRef?.current?.reset();
+              }}
+              className={cn(
+                `w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900 dark:text-gray-50`,
+                isPending ? "text-gray-500" : "text-black",
+              )}
+            />
+          </form>
+        )}
+        {image && <img src={image.url} className="max-w-md w-full px-2 py-1" />}
       </SwipeableContainer>
     </motion.li>
   );

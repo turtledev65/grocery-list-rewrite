@@ -39,6 +39,7 @@ const ListPage = ({ params }: Props) => {
           {list?.items?.map(item => (
             <Item
               text={item.text}
+              image={item.image}
               listId={item.listId}
               id={item._id}
               key={item._id}
