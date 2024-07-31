@@ -1,19 +1,24 @@
 "use client";
 
-import { Image as ImageProps } from "@/types";
 import {
   FormEvent,
   PropsWithChildren,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
-import { motion } from "framer-motion";
-import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
+import { AnimatePresence, motion, useDragControls } from "framer-motion";
+import {
+  FaRegTrashAlt as DeleteIcon,
+  FaExternalLinkAlt as ExternalIcon,
+} from "react-icons/fa";
 import { Id } from "../../../../../convex/_generated/dataModel";
 import { useDeleteItem, useEditItem } from "../_hooks";
 import cn from "classnames";
+import { createPortal } from "react-dom";
+import Link from "next/link";
 
 type ItemProps = {
   id: string;
@@ -73,7 +78,7 @@ const Item = ({ id, listId, text, image }: ItemProps) => {
             />
           </form>
         )}
-        {image && <img src={image.url} className="max-w-md w-full px-2 py-1" />}
+        {image && <ZoomableImage src={image.url} name={image.name} />}
       </SwipeableContainer>
     </motion.li>
   );
@@ -118,36 +123,88 @@ const SwipeableContainer = ({
   );
 };
 
-const Image = ({ url, pending }: ImageProps) => {
+const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
+  const [zoomedIn, setZoomedIn] = useState(false);
+  const [active, setActive] = useState(true);
+
+  const animate = useMemo(() => {
+    if (zoomedIn) return { scale: 2 };
+    else return { scale: 1, x: 0, y: 0 };
+  }, [active, zoomedIn]);
+
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  const dragControls = useDragControls();
+
   return (
-    <div className="w-full">
+    <>
       <img
-        src={url}
-        className={cn("max-w-sm", pending && "grayscale filter")}
+        src={src}
+        className="w-full max-w-md cursor-pointer bg-gray-50 px-2 py-1 dark:bg-zinc-900"
+        onClick={() => setActive(true)}
       />
-      {pending && (
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-          <svg
-            className="h-8 w-8 animate-spin text-blue-500"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
-        </div>
-      )}
-    </div>
+      <>
+        {createPortal(
+          <AnimatePresence>
+            {active && (
+              <div className="absolute inset-0 flex items-center justify-center p-4">
+                <Link
+                  href={src}
+                  target="_blank"
+                  className="absolute top-4 z-50 text-white"
+                >
+                  <motion.span
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 100 }}
+                    exit={{ opacity: 0 }}
+                    className="flex flex-row gap-4 items-center"
+                  >
+                    {name}
+                    <ExternalIcon />
+                  </motion.span>
+                </Link>
+                <motion.div
+                  layout
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: "80%" }}
+                  exit={{ opacity: 0, transition: { delay: 0.1 } }}
+                  className="absolute inset-0 z-40 cursor-pointer bg-black"
+                  onClick={() => {
+                    setActive(false);
+                    setZoomedIn(false);
+                  }}
+                  onPointerDown={e => dragControls.start(e)}
+                />
+                <motion.img
+                  layout
+                  src={src}
+                  initial={{ scale: 0 }}
+                  animate={animate}
+                  exit={{ scale: 0 }}
+                  className={cn(
+                    "z-50 object-scale-down",
+                    zoomedIn ? "cursor-zoom-out" : "cursor-zoom-in",
+                  )}
+                  onClick={() => setZoomedIn(prev => !prev)}
+                  drag={zoomedIn}
+                  dragControls={dragControls}
+                  dragConstraints={{
+                    left: window.screenLeft - (imgRef.current?.width ?? 0),
+                    right: window.screenX + (imgRef.current?.width ?? 0),
+                    top: window.screenY - (imgRef.current?.height ?? 0),
+                    bottom: window.screenY + (imgRef.current?.height ?? 0),
+                  }}
+                  dragElastic={{ left: 0.1, right: 0.1, top: 0.1, bottom: 0.1 }}
+                  dragMomentum={false}
+                  ref={imgRef}
+                />
+              </div>
+            )}
+          </AnimatePresence>,
+          document.body,
+        )}
+      </>
+    </>
   );
 };
 

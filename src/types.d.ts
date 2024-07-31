@@ -4,14 +4,8 @@ import { Ent, EntWriter } from "../convex/types";
 import { Doc } from "../convex/_generated/dataModel";
 
 export type List = Doc<"lists"> & { items?: Item[] };
-export type Item = EntWriter<"items"> & { pending?: boolean };
-
-export type Image = {
-  id: string;
-  itemId: string;
-  url: string;
-  pending?: boolean;
-};
+export type Item = Doc<"items"> & {image?: Image};
+export type Image = Doc<"images">;
 
 export type PanelItem = {
   label: string;
