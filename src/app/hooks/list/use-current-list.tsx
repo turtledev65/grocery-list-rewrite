@@ -6,6 +6,7 @@ import { api } from "../../../../convex/_generated/api";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
+import { List } from "@/types";
 
 const useCurrentList = () => {
   const pathname = usePathname();
@@ -18,7 +19,7 @@ const useCurrentList = () => {
   const { data: list } = useQuery(
     convexQuery(api.list.getList, { id: listId as Id<"lists"> }),
   );
-  return list;
+  return list as List;
 };
 
 export default useCurrentList;

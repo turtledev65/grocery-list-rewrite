@@ -3,10 +3,10 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useContext } from "react";
 import { PanelItem, PanelSection } from "@/types";
-import usePanel from "../hooks/ui/usePanel";
 import { PanelContext } from "../providers/panel-provider";
 import { SettingsContext } from "../providers/settings-provider";
 import cn from "classnames";
+import usePanel from "../hooks/ui/use-panel";
 
 function isPanelSection(
   val: PanelSection | PanelSection[],

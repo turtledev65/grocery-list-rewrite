@@ -6,11 +6,11 @@ import { SlOptionsVertical as OptionsIcon } from "react-icons/sl";
 import { MdClose as CloseIcon } from "react-icons/md";
 import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
-import usePanel from "../hooks/ui/usePanel";
 import { SidebarContext } from "../providers/sidebar-provider";
 import { useMutation } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useCurrentList } from "../hooks/list";
+import usePanel from "../hooks/ui/use-panel";
 
 const Navbar = () => {
   const router = useRouter();

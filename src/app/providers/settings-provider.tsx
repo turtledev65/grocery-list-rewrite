@@ -1,8 +1,8 @@
 "use client";
 
 import { Settings } from "@/types";
-import { createContext, PropsWithChildren, useEffect } from "react";
-import useLocalStorage from "../hooks/util/useLocalStorage";
+import { createContext, PropsWithChildren } from "react";
+import useLocalStorage from "../hooks/util/use-local-storage";
 
 type SettingsIndexSignature = {
   [key: string]: boolean | undefined;

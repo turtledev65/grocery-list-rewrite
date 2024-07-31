@@ -2,9 +2,9 @@
 
 import { List } from "@/types";
 import { createContext, PropsWithChildren, useEffect } from "react";
-import useLocalStorage from "../hooks/util/useLocalStorage";
 import { usePathname } from "next/navigation";
 import { useCurrentList } from "../hooks/list";
+import useLocalStorage from "../hooks/util/use-local-storage";
 
 type LastOpenedListContextType = {
   lastOpenedList?: List;
