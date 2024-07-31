@@ -72,7 +72,7 @@ const Item = ({ id, listId, text, image }: ItemProps) => {
                 formRef?.current?.reset();
               }}
               className={cn(
-                `w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900 dark:text-gray-50`,
+                "w-full bg-gray-50 px-2 py-1 outline-none dark:bg-zinc-900 dark:text-gray-50",
                 isPending ? "text-gray-500" : "text-black",
               )}
             />
@@ -98,13 +98,13 @@ const SwipeableContainer = ({
   return (
     <div className="relative">
       <motion.div
-        className="absolute inset-[0.6px] -z-10 flex flex-row items-center justify-end bg-red-500 font-bold text-white"
+        className="absolute inset-[1px] -z-10 flex flex-row items-center justify-end bg-red-500 font-bold text-white"
         exit={{
           translateX: "-100%",
           transition: { delay: 0.15, duration: 0.1 },
         }}
       >
-        <DeleteIcon className="text-lg" />
+        <DeleteIcon className="text-lg mr-2" />
       </motion.div>
       <motion.div
         drag={draggable && "x"}
