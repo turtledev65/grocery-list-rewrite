@@ -130,7 +130,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
   const animate = useMemo(() => {
     if (zoomedIn) return { scale: 2 };
     else return { scale: 1, x: 0, y: 0 };
-  }, [active, zoomedIn]);
+  }, [zoomedIn]);
 
   const imgRef = useRef<HTMLImageElement>(null);
 

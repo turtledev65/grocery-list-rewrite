@@ -25,7 +25,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
         { onSuccess: () => setNewItemActive(false) },
       );
     },
-    [addItem, listId],
+    [addItem, listId, setNewItemActive],
   );
 
   useEffect(() => {

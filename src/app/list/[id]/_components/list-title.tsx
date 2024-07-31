@@ -39,7 +39,7 @@ const ListTitle = ({
       inputRef.current?.blur();
       renameList({ id: listId as Id<"lists">, newName });
     },
-    [renameList, title],
+    [title, renameList, listId],
   );
 
   useEffect(() => {

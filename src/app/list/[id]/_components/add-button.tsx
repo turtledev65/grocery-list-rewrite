@@ -30,7 +30,7 @@ const AddButton = ({ listId }: { listId: string }) => {
     clearTimeout(timeoutRef.current);
     if (isCamera) fileInputRef.current?.click();
     else setNewItemActive(true);
-  }, [isCamera]);
+  }, [isCamera, setNewItemActive]);
 
   return (
     <div
@@ -89,7 +89,7 @@ const CameraButton = ({ listId }: { listId: string }) => {
         },
       });
     },
-    [listId],
+    [listId, generateUploadUrl, addItem],
   );
 
   return (

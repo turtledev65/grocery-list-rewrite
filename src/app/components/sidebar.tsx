@@ -35,7 +35,7 @@ const Sidebar = () => {
       router.push(`/list/${id}?new=true`);
       deactivate();
     });
-  }, [router, deactivate]);
+  }, [createList, router, deactivate]);
 
   const [sortState, setSortState] = useState<SortState>({ order: "asc" });
   const sortedAllLists = useMemo(() => {
