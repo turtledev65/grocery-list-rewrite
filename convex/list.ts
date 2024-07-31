@@ -11,7 +11,7 @@ export const getList = query({
   args: { id: v.id("lists") },
   handler: async (ctx, args) => {
     const list = await ctx.table("lists").get(args.id);
-    if (!list) return;
+    if (!list) throw new ConvexError(`Could not find list ${args.id}`);
 
     const items = await list.edge("items").map(async item => {
       const out = { ...item };
