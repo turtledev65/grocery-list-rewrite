@@ -43,8 +43,12 @@ const ListTitle = ({
   );
 
   useEffect(() => {
-    if (isNew) inputRef?.current?.select();
-  }, [isNew]);
+    if (!inputRef.current) return;
+    if (!isNew) return;
+
+    inputRef.current.focus();
+    inputRef.current.select();
+  }, [isNew, title]);
 
   return (
     <form onSubmit={handleRenameList} ref={formRef}>
@@ -53,7 +57,6 @@ const ListTitle = ({
         defaultValue={title}
         ref={inputRef}
         onBlur={() => formRef.current?.reset()}
-        autoFocus={isNew}
         className="w-full bg-gray-50 px-2 pb-4 text-4xl font-bold outline-none dark:bg-zinc-900"
       />
     </form>
