@@ -9,6 +9,8 @@ import { api } from "../../../../../convex/_generated/api";
 import { useAddItem } from "../_hooks";
 import { Id } from "../../../../../convex/_generated/dataModel";
 
+const SWITCH_TIMEOUT = 600;
+
 const AddButton = ({ listId }: { listId: string }) => {
   const { setNewItemActive } = useContext(NewItemContex);
   const [isCamera, setIsCamera] = useState(false);
@@ -17,7 +19,10 @@ const AddButton = ({ listId }: { listId: string }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
   const handleTouchStart = useCallback(() => {
-    const timeoutId = setTimeout(() => setIsCamera(prev => !prev), 700);
+    const timeoutId = setTimeout(
+      () => setIsCamera(prev => !prev),
+      SWITCH_TIMEOUT,
+    );
     timeoutRef.current = timeoutId;
   }, []);
 
@@ -27,8 +32,41 @@ const AddButton = ({ listId }: { listId: string }) => {
     else setNewItemActive(true);
   }, [isCamera]);
 
+  return (
+    <div
+      onMouseDown={handleTouchStart}
+      onMouseUp={handleTouchEnd}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className={cn(
+        "absolute bottom-4 right-4 h-16 w-16 rounded-full border-purple-600 text-3xl transition-colors active:opacity-80",
+        isCamera ? "bg-purple-600 text-white" : "text-purple-600",
+      )}
+    >
+      {isCamera ? <CameraButton listId={listId} /> : <TextButton />}
+    </div>
+  );
+};
+
+const TextButton = () => {
+  const { setNewItemActive } = useContext(NewItemContex);
+
+  return (
+    <button
+      onClick={() => setNewItemActive(true)}
+      className="grid place-items-center rounded-full border-4 border-inherit p-3"
+    >
+      <PlusIcon />
+    </button>
+  );
+};
+
+const CameraButton = ({ listId }: { listId: string }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
   const { mutate: addItem } = useAddItem();
+
   const handleAttachImages = useCallback(
     async (e: ChangeEvent<HTMLInputElement>) => {
       const fileList = e.target.files;
@@ -55,36 +93,22 @@ const AddButton = ({ listId }: { listId: string }) => {
   );
 
   return (
-    <div
-      className={cn(
-        "absolute bottom-4 right-4 h-16 w-16 cursor-pointer rounded-full border-4 border-purple-600 p-3 text-3xl transition-all active:opacity-80",
-        isCamera ? "bg-purple-600 text-white" : "text-purple-600",
-      )}
-      onMouseDown={handleTouchStart}
-      onMouseUp={handleTouchEnd}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-    >
-      {isCamera ? (
-        <>
-          <input
-            type="file"
-            id="images"
-            accept="image/*"
-            hidden
-            onChange={handleAttachImages}
-            ref={fileInputRef}
-          />
-          <label htmlFor="images" className="cursor-pointer">
-            <CameraIcon />
-          </label>
-        </>
-      ) : (
-        <button onClick={() => setNewItemActive(true)} className="outline-none">
-          <PlusIcon />
-        </button>
-      )}
-    </div>
+    <>
+      <input
+        type="file"
+        id="images"
+        accept="image/*"
+        hidden
+        onChange={handleAttachImages}
+        ref={fileInputRef}
+      />
+      <label
+        htmlFor="images"
+        className="absolute grid h-full w-full cursor-pointer place-items-center rounded-full bg-inherit p-3"
+      >
+        <CameraIcon />
+      </label>
+    </>
   );
 };
 
