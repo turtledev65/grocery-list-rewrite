@@ -10,6 +10,6 @@ export const attachImage = mutation({
   handler: async (ctx, args) => {
     return await ctx
       .table("images")
-      .insert({ id: args.storageId, itemId: args.itemId, name: args.name });
+      .insert({ storageId: args.storageId, itemId: args.itemId, name: args.name });
   },
 });
