@@ -28,7 +28,7 @@ const ListPage = ({ params }: Props) => {
   );
 
   return (
-    <main className="overflow-y-auto overflow-x-hidden">
+    <main className="overflow-y-auto overflow-x-hidden h-full pb-6">
       <ListTitle
         title={list?.name ?? ""}
         listId={list?._id ?? ""}
