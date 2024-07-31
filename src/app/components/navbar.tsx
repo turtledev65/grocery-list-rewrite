@@ -27,7 +27,7 @@ const Navbar = () => {
           {
             label: "Close",
             icon: <CloseIcon className="text-xl" />,
-            action: () => {},
+            action: () => router.push("/home"),
           },
         ],
       };
@@ -54,7 +54,7 @@ const Navbar = () => {
   });
 
   return (
-    <nav className="sticky top-0 z-10 flex gap-3 w-full items-center justify-between bg-gray-50 p-4 text-purple-600 dark:bg-zinc-900">
+    <nav className="sticky top-0 z-10 flex w-full items-center justify-between gap-3 bg-gray-50 p-4 text-purple-600 dark:bg-zinc-900">
       <button
         onClick={activate}
         className="text-2xl transition-opacity hover:opacity-70"
