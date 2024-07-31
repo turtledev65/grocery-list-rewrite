@@ -7,7 +7,17 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      keyframes: {
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(50px)" },
+        },
+      },
+      animation: {
+        float: "float 2s ease-in-out infinite"
+      }
+    },
   },
   plugins: [],
 };
