@@ -104,7 +104,7 @@ const SwipeableContainer = ({
           transition: { delay: 0.15, duration: 0.1 },
         }}
       >
-        <DeleteIcon className="text-lg mr-2" />
+        <DeleteIcon className="mr-2 text-lg" />
       </motion.div>
       <motion.div
         drag={draggable && "x"}
@@ -115,7 +115,7 @@ const SwipeableContainer = ({
           if (Math.abs(info.offset.x) >= DRAG_THRESHOLD) onSwipe();
         }}
         exit={{ translateX: "-100%", transition: { duration: 0.2 } }}
-        className="bg-gray-50"
+        className="bg-gray-50 dark:bg-zinc-900"
       >
         {children}
       </motion.div>
@@ -140,7 +140,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
     <>
       <img
         src={src}
-        className="w-full max-w-md cursor-pointer bg-gray-50 px-2 py-1 dark:bg-zinc-900"
+        className="w-full max-w-md cursor-pointer px-2 py-1"
         onClick={() => setActive(true)}
       />
       <>
