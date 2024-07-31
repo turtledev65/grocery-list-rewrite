@@ -125,7 +125,7 @@ const SwipeableContainer = ({
 
 const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
   const [zoomedIn, setZoomedIn] = useState(false);
-  const [active, setActive] = useState(true);
+  const [active, setActive] = useState(false);
 
   const animate = useMemo(() => {
     if (zoomedIn) return { scale: 2 };
@@ -157,7 +157,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 100 }}
                     exit={{ opacity: 0 }}
-                    className="flex flex-row gap-4 items-center"
+                    className="flex flex-row items-center gap-4"
                   >
                     {name}
                     <ExternalIcon />
