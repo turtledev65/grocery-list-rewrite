@@ -112,7 +112,7 @@ const Sidebar = () => {
                     )}
                   </h1>
                 </div>
-                <button className="grid place-items-center transition-opacity hover:opacity-70">
+                <button className="grid place-items-center transition-opacity active:opacity-70">
                   <SettingsIcon className="text-3xl text-purple-600" />
                 </button>
               </div>
@@ -124,13 +124,13 @@ const Sidebar = () => {
             </div>
             <div className="flex justify-around p-4 text-2xl text-purple-600">
               <button
-                className="transition-opacity hover:opacity-70"
+                className="transition-opacity active:opacity-70"
                 onClick={handleCreateList}
               >
                 <CreateListIcon />
               </button>
               <button
-                className="transition-opacity hover:opacity-70"
+                className="transition-opacity active:opacity-70"
                 onClick={activateSortPanel}
               >
                 {sortState.order === "desc" ? (
@@ -139,7 +139,7 @@ const Sidebar = () => {
                   <SortAscIcon />
                 )}
               </button>
-              <button className="transition-opacity hover:opacity-70">
+              <button className="transition-opacity active:opacity-70">
                 <FilterIcon />
               </button>
             </div>

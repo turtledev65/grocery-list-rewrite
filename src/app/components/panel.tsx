@@ -126,7 +126,7 @@ const PanelButton = ({
         else action();
       }}
       className={cn(
-        "flex items-center gap-2 rounded-md p-2 text-left hover:bg-gray-200 dark:hover:bg-zinc-700",
+        "flex items-center gap-2 rounded-md p-2 text-left active:bg-gray-200 dark:active:bg-zinc-700",
         className,
         {
           "text-red-500": critical,

@@ -57,7 +57,7 @@ const Navbar = () => {
     <nav className="sticky top-0 z-10 flex w-full items-center justify-between gap-3 bg-gray-50 p-4 text-purple-600 dark:bg-zinc-900">
       <button
         onClick={activate}
-        className="text-2xl transition-opacity hover:opacity-70"
+        className="text-2xl transition-opacity active:opacity-70"
       >
         <SidebarIcon />
       </button>
@@ -67,7 +67,7 @@ const Navbar = () => {
         </h1>
       )}
       <button
-        className="text-2xl transition-opacity hover:opacity-70"
+        className="text-2xl transition-opacity active:opacity-70"
         onClick={activateOptionsPanel}
       >
         <OptionsIcon />
