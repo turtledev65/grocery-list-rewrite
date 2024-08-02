@@ -1,22 +1,12 @@
 "use client";
 
-import {
-  ChangeEvent,
-  PropsWithChildren,
-  useContext,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { useContext, useMemo } from "react";
 import {
   DEFAULT_SETTINGS,
   SettingsContext,
 } from "../providers/settings-provider";
-import { motion } from "framer-motion";
-import cn from "classnames";
 import { Colorscheme } from "@/types";
+import { Input, Section, Slider, Switch } from "./_components";
 
 const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
@@ -24,8 +14,6 @@ const SettingsPage = () => {
     if (!settings) return { ...DEFAULT_SETTINGS };
     return settings;
   }, [settings]);
-  const [val, setVal] = useState(false);
-  const [_, startTransition] = useTransition();
 
   return (
     <div className="h-full px-4">
@@ -64,9 +52,7 @@ const SettingsPage = () => {
           </div>
           <Input
             defaultValue={safeSettings.defaultListTitle}
-            onSubmit={text =>
-              startTransition(() => updateSettings({ defaultListTitle: text }))
-            }
+            onSubmit={text => updateSettings({ defaultListTitle: text })}
           />
         </div>
       </Section>
@@ -127,102 +113,6 @@ const SettingsPage = () => {
         </div>
       </Section>
     </div>
-  );
-};
-
-type InputProps = {
-  defaultValue?: string;
-  onSubmit?: (text: string) => void;
-};
-const Input = ({ defaultValue, onSubmit }: InputProps) => {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        const text = inputRef.current?.value.trim();
-        if (!text || !onSubmit) return;
-
-        inputRef.current?.blur();
-        onSubmit(text);
-      }}
-      className="w-full py-2"
-    >
-      <input
-        type="text"
-        defaultValue={defaultValue}
-        ref={inputRef}
-        className="w-full rounded-md border-4 border-transparent bg-gray-200 px-2 py-1 outline-none transition-colors hover:border-gray-400"
-      />
-    </form>
-  );
-};
-
-type SliderProps = {
-  val: number;
-  min: number;
-  max: number;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-const Slider = ({ val, min, max, onChange }: SliderProps) => {
-  return (
-    <div className="group relative w-full px-6 py-4">
-      <input
-        type="range"
-        value={val}
-        min={min}
-        max={max}
-        onChange={onChange}
-        className="slider w-full"
-      />
-      <span className="absolute bottom-full left-1/2 -translate-x-1/2 transform rounded-md bg-gray-200 px-4 py-2 opacity-0 transition-opacity after:absolute after:left-1/2 after:top-full after:-translate-x-1/2 after:transform after:border-[10px] after:border-solid after:border-transparent after:border-t-gray-200 after:content-[''] group-hover:opacity-100 dark:bg-zinc-800 after:dark:border-t-zinc-800">
-        {val}
-      </span>
-    </div>
-  );
-};
-
-type SectionProps = { title: string } & PropsWithChildren;
-const Section = ({ title, children }: SectionProps) => {
-  return (
-    <section className="*:border-b-2 *:border-gray-300 *:py-2 last:*:border-transparent *:dark:border-slate-600">
-      <h2 className="mt-4 text-3xl font-bold">{title}</h2>
-      {children}
-    </section>
-  );
-};
-
-type SwitchProps = {
-  value: boolean;
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-};
-const Switch = ({ value, onChange }: SwitchProps) => {
-  const id = useId();
-
-  return (
-    <>
-      <input
-        type="checkbox"
-        hidden
-        checked={value}
-        onChange={onChange}
-        id={id}
-      />
-      <label
-        htmlFor={id}
-        className={cn(
-          "flex min-h-7 min-w-11 items-center rounded-full p-[2px] transition-colors",
-          value ? "justify-end bg-purple-600" : "bg-gray-500",
-        )}
-      >
-        <motion.div
-          layout
-          transition={{ type: "spring", stiffness: 700, damping: 40 }}
-          className="h-6 w-6 rounded-full bg-gray-50"
-        />
-      </label>
-    </>
   );
 };
 
