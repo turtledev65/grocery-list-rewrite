@@ -10,7 +10,6 @@ import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
 import NewItemForm from "./_components/new-item-form";
 import NewItemProvider from "./_components/new-item-provider";
-import { useEffect } from "react";
 import LoadingSpinner from "@/app/components/loading-spinner";
 import Link from "next/link";
 
@@ -44,9 +43,7 @@ const ListPage = ({ params }: Props) => {
   if (status === "error")
     return (
       <div className="p-4">
-        <h1 className="mb-8 text-4xl font-bold">
-          An Errror occured
-        </h1>
+        <h1 className="mb-8 text-4xl font-bold">An Errror occured</h1>
         <p className="text-left text-red-600">{error.message}</p>
         <div className="absolute bottom-0 left-0 flex w-full items-center justify-center py-8">
           <Link

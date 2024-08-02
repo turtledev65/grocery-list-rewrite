@@ -30,6 +30,7 @@ const HomePage = () => {
         >
           Create new list
         </Button>
+        <Button onClick={() => router.push("/settings")}>Settings</Button>
         <Button onClick={() => router.push("/about")}>About</Button>
         <Button>Close</Button>
       </div>

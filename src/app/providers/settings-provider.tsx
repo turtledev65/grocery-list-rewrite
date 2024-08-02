@@ -5,7 +5,7 @@ import { createContext, PropsWithChildren } from "react";
 import useLocalStorage from "../hooks/util/use-local-storage";
 
 type SettingsIndexSignature = {
-  [key: string]: boolean | undefined;
+  [key: string]: unknown;
 };
 type SettingsContextType = {
   settings?: Settings & SettingsIndexSignature;
@@ -15,8 +15,13 @@ export const SettingsContext = createContext<SettingsContextType>(
   {} as SettingsContextType,
 );
 
-const DEFAULT_SETTINGS: Readonly<Settings> = {
+export const DEFAULT_SETTINGS: Readonly<Settings> = {
   askToConfirm: true,
+  splitItems: false,
+  defaultListTitle: "Untilted",
+  colorscheme: "auto",
+  accentColor: "#9333ea",
+  fontSize: 16,
 };
 
 const SettingsProvider = ({ children }: PropsWithChildren) => {

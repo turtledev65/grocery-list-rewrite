@@ -112,7 +112,13 @@ const Sidebar = () => {
                     )}
                   </h1>
                 </div>
-                <button className="grid place-items-center transition-opacity active:opacity-70">
+                <button
+                  onClick={() => {
+                    deactivate();
+                    router.push("/settings");
+                  }}
+                  className="grid place-items-center transition-opacity active:opacity-70"
+                >
                   <SettingsIcon className="text-3xl text-purple-600" />
                 </button>
               </div>
