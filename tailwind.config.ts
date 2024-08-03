@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        accent: "rgb(var(--color-accent) / var(--tw-bg-opacity, 1))",
+      },
       keyframes: {
         float: {
           "0%, 100%": { transform: "translateY(0)" },

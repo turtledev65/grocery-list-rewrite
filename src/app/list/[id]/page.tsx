@@ -48,7 +48,7 @@ const ListPage = ({ params }: Props) => {
         <div className="absolute bottom-0 left-0 flex w-full items-center justify-center py-8">
           <Link
             href="/home"
-            className="select-none rounded-md bg-purple-600 px-6 py-2 text-lg text-gray-50 active:opacity-80"
+            className="select-none rounded-md bg-accent px-6 py-2 text-lg text-gray-50 active:opacity-80"
           >
             Go Home
           </Link>

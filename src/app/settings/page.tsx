@@ -8,6 +8,7 @@ import { Input, Section, Slider, Switch } from "./_components";
 const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
 
+
   return (
     <div className="h-full px-4">
       <Section title="Behaivior">
@@ -80,11 +81,12 @@ const SettingsPage = () => {
             type="color"
             id="color"
             hidden
+            value={settings.accentColor}
             onChange={e => updateSettings({ accentColor: e.target.value })}
           />
           <label
             htmlFor="color"
-            className="min-h-8 min-w-8 rounded-full"
+            className="min-h-8 min-w-8 cursor-pointer rounded-full"
             style={{ backgroundColor: settings.accentColor }}
           />
         </div>

@@ -22,8 +22,8 @@ const Switch = ({ value, onChange }: Props) => {
       <label
         htmlFor={id}
         className={cn(
-          "flex min-h-7 min-w-11 items-center rounded-full p-[2px] transition-colors",
-          value ? "justify-end bg-purple-600" : "bg-gray-500",
+          "flex min-h-7 min-w-11 cursor-pointer items-center rounded-full p-[2px] transition-colors",
+          value ? "justify-end bg-accent" : "bg-gray-500",
         )}
       >
         <motion.div

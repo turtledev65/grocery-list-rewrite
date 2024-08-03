@@ -127,7 +127,7 @@ const Sidebar = () => {
                   }}
                   className="grid place-items-center transition-opacity active:opacity-70"
                 >
-                  <SettingsIcon className="text-3xl text-purple-600" />
+                  <SettingsIcon className="text-3xl text-accent" />
                 </button>
               </div>
               <div className="flex flex-col">
@@ -136,7 +136,7 @@ const Sidebar = () => {
                 ))}
               </div>
             </div>
-            <div className="flex justify-around p-4 text-2xl text-purple-600">
+            <div className="flex justify-around p-4 text-2xl text-accent">
               <button
                 className="transition-opacity active:opacity-70"
                 onClick={handleCreateList}
@@ -213,7 +213,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
       className={cn(
         "select-none rounded-lg px-6 py-1 text-start text-lg transition-colors",
         {
-          "bg-purple-600 text-white": isSelected,
+          "bg-accent text-white": isSelected,
           "active:bg-gray-200 dark:active:bg-zinc-700": !isSelected,
         },
       )}

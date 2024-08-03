@@ -160,7 +160,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
                     className="flex flex-row items-center gap-4"
                   >
                     {name}
-                    <ExternalIcon className="text-purple-500" />
+                    <ExternalIcon className="text-accent" />
                   </motion.span>
                 </Link>
                 <motion.div

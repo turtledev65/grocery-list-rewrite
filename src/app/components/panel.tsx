@@ -114,7 +114,7 @@ const PanelButton = ({
         },
         { label: "Confirm", className: "text-red-500", action },
       ],
-      [{ label: "Close", className: "text-purple-600", action: deactivate }],
+      [{ label: "Close", className: "text-accent", action: deactivate }],
     ],
   });
 

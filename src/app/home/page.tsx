@@ -43,7 +43,7 @@ const Button = ({ children, onClick }: ButtonProps) => {
   return (
     <button
       onClick={onClick}
-      className="rounded-md bg-slate-100 p-3 text-lg text-purple-600 active:opacity-80 dark:bg-zinc-800"
+      className="rounded-md bg-slate-100 p-3 text-lg text-accent active:opacity-80 dark:bg-zinc-800"
     >
       {children}
     </button>

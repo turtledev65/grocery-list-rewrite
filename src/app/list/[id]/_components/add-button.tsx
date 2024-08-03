@@ -39,8 +39,8 @@ const AddButton = ({ listId }: { listId: string }) => {
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       className={cn(
-        "absolute bottom-4 right-4 h-16 w-16 rounded-full border-purple-600 text-3xl transition-colors active:opacity-80",
-        isCamera ? "bg-purple-600 text-white" : "text-purple-600",
+        "absolute bottom-4 right-4 h-16 w-16 rounded-full border-accent text-3xl transition-colors active:opacity-80",
+        isCamera ? "bg-accent text-white" : "text-accent",
       )}
     >
       {isCamera ? <CameraButton listId={listId} /> : <TextButton />}
