@@ -21,7 +21,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   splitItems: false,
   defaultListTitle: "Untilted",
   colorscheme: "auto",
-  accentColor: "147 51 234",
+  accentColor: "#9333ea",
   fontSize: 16,
 };
 
