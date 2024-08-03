@@ -60,7 +60,7 @@ const ListPage = ({ params }: Props) => {
     );
 
   return (
-    <div className="h-full pb-6">
+    <div className="h-full">
       <ListTitle
         title={list?.name ?? ""}
         listId={list?._id ?? ""}

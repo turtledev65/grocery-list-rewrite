@@ -20,9 +20,12 @@ const NewItemForm = ({ listId }: { listId: string }) => {
       const text = itemTextRef.current?.value.trim();
       if (!text) return;
 
+      window.scrollTo(0, document.body.scrollHeight);
       addItem(
         { text, listId: listId as Id<"lists"> },
-        { onSuccess: () => setNewItemActive(false) },
+        {
+          onSuccess: () => setNewItemActive(false),
+        },
       );
     },
     [addItem, listId, setNewItemActive],
