@@ -15,9 +15,8 @@ import cn from "classnames";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
-import { useCurrentList } from "../hooks/list";
+import { useCreateList, useCurrentList } from "../hooks/list";
 import usePanel from "../hooks/ui/use-panel";
-import useCreateList from "../hooks/list/use-create-list";
 import { SettingsContext } from "../providers/settings-provider";
 
 type SortOrder = "asc" | "desc";

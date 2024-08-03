@@ -1,15 +1,12 @@
 "use client";
 
-import { AddButton, Item } from "./_components";
+import { AddButton, Item, ListTitle, NewItemForm, NewItemProvider } from "./_components";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
-import ListTitle from "./_components/list-title";
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
-import NewItemForm from "./_components/new-item-form";
-import NewItemProvider from "./_components/new-item-provider";
 import LoadingSpinner from "@/app/components/loading-spinner";
 import Link from "next/link";
 
