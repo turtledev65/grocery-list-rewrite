@@ -1,16 +1,15 @@
 "use client";
 
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
-import { useConvexMutation } from "@convex-dev/react-query";
-import { api } from "../../../convex/_generated/api";
+import useCreateList from "../hooks/list/use-create-list";
+import { SettingsContext } from "../providers/settings-provider";
 
 const HomePage = () => {
   const router = useRouter();
-  const { mutate: createList } = useMutation({
-    mutationFn: useConvexMutation(api.list.createList),
-  });
+
+  const { settings } = useContext(SettingsContext);
+  const { mutate: createList } = useCreateList();
 
   return (
     <main className="flex h-full flex-col items-center justify-center">
@@ -19,7 +18,7 @@ const HomePage = () => {
         <Button
           onClick={() =>
             createList(
-              { name: "Untilted" },
+              { name: settings.defaultListTitle },
               {
                 onSuccess: id => {
                   router.push(`/list/${id}?new=true`);

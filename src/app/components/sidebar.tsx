@@ -18,6 +18,8 @@ import { api } from "../../../convex/_generated/api";
 import { Id } from "../../../convex/_generated/dataModel";
 import { useCurrentList } from "../hooks/list";
 import usePanel from "../hooks/ui/use-panel";
+import useCreateList from "../hooks/list/use-create-list";
+import { SettingsContext } from "../providers/settings-provider";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";
@@ -25,17 +27,24 @@ type SortState = { type?: SortType; order: SortOrder };
 
 const Sidebar = () => {
   const { active, deactivate } = useContext(SidebarContext);
+  const { settings } = useContext(SettingsContext);
 
   const allLists = useQuery(api.list.getAllLists);
-  const createList = useMutation(api.list.createList);
+  const { mutate: createList } = useCreateList();
 
   const router = useRouter();
   const handleCreateList = useCallback(() => {
-    createList({ name: "Untilted" }).then(id => {
-      router.push(`/list/${id}?new=true`);
-      deactivate();
-    });
-  }, [createList, router, deactivate]);
+    createList(
+      { name: settings.defaultListTitle },
+      {
+        onSuccess: id => {
+          router.push(`/list/${id}?new=true`);
+          deactivate();
+        },
+        onError: err => console.error(err),
+      },
+    );
+  }, [settings, router, createList, deactivate]);
 
   const [sortState, setSortState] = useState<SortState>({ order: "asc" });
   const sortedAllLists = useMemo(() => {
