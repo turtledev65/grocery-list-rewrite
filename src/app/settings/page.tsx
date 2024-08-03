@@ -8,7 +8,6 @@ import { Input, Section, Slider, Switch } from "./_components";
 const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
 
-
   return (
     <div className="h-full px-4">
       <Section title="Behaivior">

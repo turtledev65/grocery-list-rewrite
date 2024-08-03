@@ -1,8 +1,9 @@
 "use client";
 
 import { Settings } from "@/types";
-import { createContext, PropsWithChildren, useMemo } from "react";
+import { createContext, PropsWithChildren, useEffect, useMemo } from "react";
 import useLocalStorage from "../hooks/util/use-local-storage";
+import hexToRgb from "@/utils/hexToRgb";
 
 type SettingsIndexSignature = {
   [key: string]: unknown;
@@ -20,7 +21,7 @@ export const DEFAULT_SETTINGS: Readonly<Settings> = {
   splitItems: false,
   defaultListTitle: "Untilted",
   colorscheme: "auto",
-  accentColor: "#9333ea",
+  accentColor: "147 51 234",
   fontSize: 16,
 };
 
@@ -33,6 +34,15 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     if (!settings) return { ...DEFAULT_SETTINGS };
     return settings;
   }, [settings]);
+
+  useEffect(() => {
+    const accentColor = hexToRgb(safeSettings.accentColor);
+    if (accentColor)
+      document.documentElement.style.setProperty(
+        "--color-accent",
+        `${accentColor.r} ${accentColor.g} ${accentColor.b}`,
+      );
+  }, [safeSettings.accentColor]);
 
   const updateSettings = (args: Partial<Settings>) => {
     setSettings(prev => {
