@@ -24,10 +24,10 @@ export default function RootLayout({
         <Providers>
           <Sidebar />
           <Panel />
-          <div className="flex h-full flex-col">
+          <main className="h-full overflow-y-auto overflow-x-hidden">
             <Navbar />
             {children}
-          </div>
+          </main>
         </Providers>
       </body>
     </html>

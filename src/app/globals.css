@@ -10,7 +10,7 @@
 
   html {
     font-size: var(--base-font-size);
-    @apply touch-none overflow-hidden scroll-smooth bg-gray-50 selection:bg-accent selection:bg-opacity-25 dark:bg-zinc-900 dark:text-gray-50;
+    @apply touch-none overflow-x-hidden scroll-smooth bg-gray-50 selection:bg-accent selection:bg-opacity-25 dark:bg-zinc-900 dark:text-gray-50;
   }
 }
 

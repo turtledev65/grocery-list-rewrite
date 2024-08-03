@@ -13,8 +13,12 @@ const config: Config = {
       },
       keyframes: {
         float: {
-          "0%, 100%": { transform: "translateY(0)" },
-          "50%": { transform: "translateY(-50px)" },
+          "0%, 100%": {
+            transform: "translate(var(--tw-translate-x), var(--tw-translate-y))",
+          },
+          "50%": {
+            transform: "translate(var(--tw-translate-x), -20px)",
+          },
         },
       },
       animation: {
@@ -23,6 +27,6 @@ const config: Config = {
     },
   },
   plugins: [],
-  darkMode: ["selector"]
+  darkMode: ["selector"],
 };
 export default config;

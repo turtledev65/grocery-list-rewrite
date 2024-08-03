@@ -1,6 +1,12 @@
 "use client";
 
-import { AddButton, Item, ListTitle, NewItemForm, NewItemProvider } from "./_components";
+import {
+  AddButton,
+  Item,
+  ListTitle,
+  NewItemForm,
+  NewItemProvider,
+} from "./_components";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
@@ -54,7 +60,7 @@ const ListPage = ({ params }: Props) => {
     );
 
   return (
-    <main className="h-full overflow-y-auto overflow-x-hidden pb-6">
+    <div className="h-full pb-6">
       <ListTitle
         title={list?.name ?? ""}
         listId={list?._id ?? ""}
@@ -78,7 +84,7 @@ const ListPage = ({ params }: Props) => {
         <NewItemForm listId={list?._id ?? ""} />
         <AddButton listId={list?._id ?? ""} />
       </NewItemProvider>
-    </main>
+    </div>
   );
 };
 

@@ -28,7 +28,7 @@ export const Panel = () => {
             animate={{ opacity: "75%" }}
             exit={{ opacity: 0 }}
             onClick={deactivate}
-            className="absolute inset-0 z-40 cursor-pointer bg-black"
+            className="fixed inset-0 z-40 cursor-pointer bg-black"
           />
           <motion.div
             drag="y"
@@ -41,7 +41,7 @@ export const Panel = () => {
             initial={{ bottom: "-100%" }}
             animate={{ bottom: 0, transition: { delay: 0.1 } }}
             exit={{ bottom: "-100%" }}
-            className="absolute bottom-0 z-50 w-full rounded-t-xl bg-gray-50 p-2 dark:bg-zinc-800"
+            className="fixed bottom-0 z-50 w-full rounded-t-xl bg-gray-50 p-2 dark:bg-zinc-800"
           >
             <div className="mx-auto h-1 w-16 rounded-lg bg-gray-400" />
             {title && (
