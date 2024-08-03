@@ -5,9 +5,11 @@
 @layer base {
   :root {
     --color-accent: 147 51 234;
+    --base-font-size: 16px;
   }
 
   html {
+    font-size: var(--base-font-size);
     @apply touch-none overflow-hidden scroll-smooth bg-gray-50 selection:bg-accent selection:bg-opacity-25 dark:bg-zinc-900 dark:text-gray-50;
   }
 }

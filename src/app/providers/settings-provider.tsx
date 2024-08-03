@@ -44,6 +44,13 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
       );
   }, [safeSettings.accentColor]);
 
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--base-font-size",
+      `${safeSettings.fontSize}px`,
+    );
+  }, [safeSettings.fontSize]);
+
   const updateSettings = (args: Partial<Settings>) => {
     setSettings(prev => {
       const out = prev ? { ...prev } : { ...DEFAULT_SETTINGS };
