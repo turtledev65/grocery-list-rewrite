@@ -1,19 +1,12 @@
 "use client";
 
-import { useContext, useMemo } from "react";
-import {
-  DEFAULT_SETTINGS,
-  SettingsContext,
-} from "../providers/settings-provider";
+import { useContext } from "react";
+import { SettingsContext } from "../providers/settings-provider";
 import { Colorscheme } from "@/types";
 import { Input, Section, Slider, Switch } from "./_components";
 
 const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
-  const safeSettings = useMemo(() => {
-    if (!settings) return { ...DEFAULT_SETTINGS };
-    return settings;
-  }, [settings]);
 
   return (
     <div className="h-full px-4">
@@ -26,7 +19,7 @@ const SettingsPage = () => {
             </p>
           </div>
           <Switch
-            value={safeSettings.askToConfirm}
+            value={settings.askToConfirm}
             onChange={e => updateSettings({ askToConfirm: e.target.checked })}
           />
         </div>
@@ -38,7 +31,7 @@ const SettingsPage = () => {
             </p>
           </div>
           <Switch
-            value={safeSettings.splitItems}
+            value={settings.splitItems}
             onChange={e => updateSettings({ splitItems: e.target.checked })}
           />
         </div>
@@ -51,7 +44,7 @@ const SettingsPage = () => {
             </p>
           </div>
           <Input
-            defaultValue={safeSettings.defaultListTitle}
+            defaultValue={settings.defaultListTitle}
             onSubmit={text => updateSettings({ defaultListTitle: text })}
           />
         </div>
@@ -65,7 +58,7 @@ const SettingsPage = () => {
             </p>
           </div>
           <select
-            value={safeSettings.colorscheme}
+            value={settings.colorscheme}
             onChange={e =>
               updateSettings({ colorscheme: e.target.value as Colorscheme })
             }
@@ -92,7 +85,7 @@ const SettingsPage = () => {
           <label
             htmlFor="color"
             className="min-h-8 min-w-8 rounded-full"
-            style={{ backgroundColor: safeSettings.accentColor }}
+            style={{ backgroundColor: settings.accentColor }}
           />
         </div>
         <div className="flex flex-col items-center justify-between gap-2">
@@ -103,7 +96,7 @@ const SettingsPage = () => {
             </p>
           </div>
           <Slider
-            val={safeSettings.fontSize}
+            val={settings.fontSize}
             min={10}
             max={30}
             onChange={e =>

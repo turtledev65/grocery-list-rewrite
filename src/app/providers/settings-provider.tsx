@@ -1,14 +1,14 @@
 "use client";
 
 import { Settings } from "@/types";
-import { createContext, PropsWithChildren } from "react";
+import { createContext, PropsWithChildren, useMemo } from "react";
 import useLocalStorage from "../hooks/util/use-local-storage";
 
 type SettingsIndexSignature = {
   [key: string]: unknown;
 };
 type SettingsContextType = {
-  settings?: Settings & SettingsIndexSignature;
+  settings: Settings & SettingsIndexSignature;
   updateSettings: (args: Partial<Settings>) => void;
 };
 export const SettingsContext = createContext<SettingsContextType>(
@@ -29,6 +29,11 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     Settings & SettingsIndexSignature
   >("settings", DEFAULT_SETTINGS);
 
+  const safeSettings = useMemo(() => {
+    if (!settings) return { ...DEFAULT_SETTINGS };
+    return settings;
+  }, [settings]);
+
   const updateSettings = (args: Partial<Settings>) => {
     setSettings(prev => {
       const out = prev ? { ...prev } : { ...DEFAULT_SETTINGS };
@@ -38,7 +43,9 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <SettingsContext.Provider value={{ settings, updateSettings }}>
+    <SettingsContext.Provider
+      value={{ settings: safeSettings, updateSettings }}
+    >
       {children}
     </SettingsContext.Provider>
   );
