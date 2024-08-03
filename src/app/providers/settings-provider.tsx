@@ -51,6 +51,25 @@ const SettingsProvider = ({ children }: PropsWithChildren) => {
     );
   }, [safeSettings.fontSize]);
 
+  useEffect(() => {
+    switch (safeSettings.colorscheme) {
+      case "light":
+        document.documentElement.classList.remove("dark");
+        break;
+      case "dark":
+        document.documentElement.classList.add("dark");
+        break;
+      case "auto":
+      default:
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (prefersDark) document.documentElement.classList.add("dark");
+        else document.documentElement.classList.remove("dark");
+        break;
+    }
+  }, [safeSettings.colorscheme]);
+
   const updateSettings = (args: Partial<Settings>) => {
     setSettings(prev => {
       const out = prev ? { ...prev } : { ...DEFAULT_SETTINGS };
