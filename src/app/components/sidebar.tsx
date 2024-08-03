@@ -4,7 +4,6 @@ import { MdOutlineSettings as SettingsIcon } from "react-icons/md";
 import { useCallback, useContext, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiEdit as CreateListIcon } from "react-icons/fi";
-import { LuFilter as FilterIcon } from "react-icons/lu";
 import {
   FaSortAmountDown as SortDescIcon,
   FaSortAmountUp as SortAscIcon,
@@ -153,9 +152,6 @@ const Sidebar = () => {
                 ) : (
                   <SortAscIcon />
                 )}
-              </button>
-              <button className="transition-opacity active:opacity-70">
-                <FilterIcon />
               </button>
             </div>
           </motion.aside>

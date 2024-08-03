@@ -31,7 +31,6 @@ const HomePage = () => {
         </Button>
         <Button onClick={() => router.push("/settings")}>Settings</Button>
         <Button onClick={() => router.push("/about")}>About</Button>
-        <Button>Close</Button>
       </div>
     </main>
   );
