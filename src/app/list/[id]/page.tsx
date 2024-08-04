@@ -4,6 +4,7 @@ import {
   AddButton,
   Item,
   ListTitle,
+  NewImage,
   NewItemForm,
   NewItemProvider,
 } from "./_components";
@@ -80,9 +81,10 @@ const ListPage = ({ params }: Props) => {
         </AnimatePresence>
       </ul>
 
-      <NewItemProvider>
-        <NewItemForm listId={list?._id ?? ""} />
-        <AddButton listId={list?._id ?? ""} />
+      <NewItemProvider listId={list?._id}>
+        <NewItemForm />
+        <NewImage />
+        <AddButton />
       </NewItemProvider>
     </div>
   );

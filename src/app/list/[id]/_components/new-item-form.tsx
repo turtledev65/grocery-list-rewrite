@@ -2,17 +2,16 @@
 
 import { FormEvent, useCallback, useContext, useEffect, useRef } from "react";
 import { NewItemContex } from "./new-item-provider";
-import { Id } from "../../../../../convex/_generated/dataModel";
 import { motion } from "framer-motion";
-import { useAddItem } from "../_hooks";
 import cn from "classnames";
 
-const NewItemForm = ({ listId }: { listId: string }) => {
-  const { isNewItemActive, setNewItemActive } = useContext(NewItemContex);
+const NewItemForm = () => {
+  const { isFormActive, isAddingItem, setIsFormActive } =
+    useContext(NewItemContex);
 
   const itemTextRef = useRef<HTMLInputElement>(null);
 
-  const { mutate: addItem, isPending: isAddingItem } = useAddItem();
+  const { addTextItem } = useContext(NewItemContex);
   const handleAddItem = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -21,14 +20,9 @@ const NewItemForm = ({ listId }: { listId: string }) => {
       if (!text) return;
 
       window.scrollTo(0, document.body.scrollHeight);
-      addItem(
-        { text, listId: listId as Id<"lists"> },
-        {
-          onSuccess: () => setNewItemActive(false),
-        },
-      );
+      addTextItem({ text });
     },
-    [addItem, listId, setNewItemActive],
+    [addTextItem, setIsFormActive],
   );
 
   useEffect(() => {
@@ -36,7 +30,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
   }, [isAddingItem]);
 
   return (
-    isNewItemActive && (
+    isFormActive && (
       <motion.form
         initial={{ scale: 0 }}
         animate={{
@@ -48,7 +42,7 @@ const NewItemForm = ({ listId }: { listId: string }) => {
         <input
           autoFocus
           onBlur={() => {
-            if (!isAddingItem) setNewItemActive(false);
+            if (!isAddingItem) setIsFormActive(false);
           }}
           ref={itemTextRef}
           className={cn(

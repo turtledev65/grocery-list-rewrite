@@ -2,17 +2,13 @@
 
 import { ChangeEvent, useCallback, useContext, useRef, useState } from "react";
 import { FaPlus as PlusIcon, FaCamera as CameraIcon } from "react-icons/fa";
-import cn from "classnames";
 import { NewItemContex } from "./new-item-provider";
-import { useMutation } from "convex/react";
-import { api } from "../../../../../convex/_generated/api";
-import { useAddItem } from "../_hooks";
-import { Id } from "../../../../../convex/_generated/dataModel";
+import cn from "classnames";
 
 const SWITCH_TIMEOUT = 600;
 
-const AddButton = ({ listId }: { listId: string }) => {
-  const { setNewItemActive } = useContext(NewItemContex);
+const AddButton = () => {
+  const { setIsFormActive } = useContext(NewItemContex);
   const [isCamera, setIsCamera] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -29,8 +25,8 @@ const AddButton = ({ listId }: { listId: string }) => {
   const handleTouchEnd = useCallback(() => {
     clearTimeout(timeoutRef.current);
     if (isCamera) fileInputRef.current?.click();
-    else setNewItemActive(true);
-  }, [isCamera, setNewItemActive]);
+    else setIsFormActive(true);
+  }, [isCamera, setIsFormActive]);
 
   return (
     <div
@@ -43,17 +39,17 @@ const AddButton = ({ listId }: { listId: string }) => {
         isCamera ? "bg-accent text-white" : "text-accent",
       )}
     >
-      {isCamera ? <CameraButton listId={listId} /> : <TextButton />}
+      {isCamera ? <CameraButton /> : <TextButton />}
     </div>
   );
 };
 
 const TextButton = () => {
-  const { setNewItemActive } = useContext(NewItemContex);
+  const { setIsFormActive } = useContext(NewItemContex);
 
   return (
     <button
-      onClick={() => setNewItemActive(true)}
+      onClick={() => setIsFormActive(true)}
       className="grid place-items-center rounded-full border-4 border-inherit p-3"
     >
       <PlusIcon />
@@ -61,36 +57,18 @@ const TextButton = () => {
   );
 };
 
-const CameraButton = ({ listId }: { listId: string }) => {
+const CameraButton = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const generateUploadUrl = useMutation(api.files.generateUploadUrl);
-  const { mutate: addItem } = useAddItem();
+  const { addImageItem } = useContext(NewItemContex);
 
-  const handleAttachImages = useCallback(
-    async (e: ChangeEvent<HTMLInputElement>) => {
-      const fileList = e.target.files;
-      if (!fileList || fileList.length === 0) return;
-      const file = fileList[0];
+  const handleAddImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileList = e.target.files;
+    if (!fileList || fileList.length == 0) return;
+    const file = fileList[0];
 
-      const postUrl = await generateUploadUrl();
-      const jsonVal = await fetch(postUrl, {
-        method: "POST",
-        headers: { "Content-Type": "image/*" },
-        body: file,
-      });
-      const res = await jsonVal.json();
-
-      addItem({
-        listId: listId as Id<"lists">,
-        image: {
-          storageId: res.storageId,
-          name: file.name,
-        },
-      });
-    },
-    [listId, generateUploadUrl, addItem],
-  );
+    addImageItem({ file });
+  };
 
   return (
     <>
@@ -99,7 +77,7 @@ const CameraButton = ({ listId }: { listId: string }) => {
         id="images"
         accept="image/*"
         hidden
-        onChange={handleAttachImages}
+        onChange={handleAddImage}
         ref={fileInputRef}
       />
       <label
