@@ -36,7 +36,7 @@ const NewItemProvider = ({ listId, children }: Props) => {
         { onSuccess: () => setIsFormActive(false) },
       );
     },
-    [addItem, setIsFormActive],
+    [addItem, setIsFormActive, listId],
   );
 
   const generateUploadUrl = useMutation(api.files.generateUploadUrl);
@@ -61,7 +61,7 @@ const NewItemProvider = ({ listId, children }: Props) => {
         { onSuccess: () => setNewImageFile(undefined) },
       );
     },
-    [addItem, setIsFormActive],
+    [addItem, generateUploadUrl, listId],
   );
 
   return (
