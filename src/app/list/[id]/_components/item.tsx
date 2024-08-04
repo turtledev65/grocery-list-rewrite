@@ -147,7 +147,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
         {createPortal(
           <AnimatePresence>
             {active && (
-              <div className="absolute inset-0 flex items-center justify-center p-4">
+              <div className="fixed z-40 inset-0 flex items-center justify-center p-4">
                 <Link
                   href={src}
                   target="_blank"
