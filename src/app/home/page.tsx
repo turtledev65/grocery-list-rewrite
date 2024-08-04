@@ -12,8 +12,10 @@ const HomePage = () => {
   const { mutate: createList } = useCreateList();
 
   return (
-    <main className="flex h-full flex-col items-center justify-center">
-      <h1 className="mb-10 text-4xl font-bold">No list open</h1>
+    <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center">
+      <h1 className="mb-10 text-nowrap text-center text-4xl font-bold">
+        No list open
+      </h1>
       <div className="flex flex-col gap-4 align-baseline">
         <Button
           onClick={() =>
@@ -32,7 +34,7 @@ const HomePage = () => {
         <Button onClick={() => router.push("/settings")}>Settings</Button>
         <Button onClick={() => router.push("/about")}>About</Button>
       </div>
-    </main>
+    </div>
   );
 };
 

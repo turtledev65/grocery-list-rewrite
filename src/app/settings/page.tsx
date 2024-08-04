@@ -9,7 +9,7 @@ const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
 
   return (
-    <div className="h-full px-4">
+    <div className="px-4">
       <Section title="Behaivior">
         <div className="flex items-center justify-between gap-1">
           <div className="w-full">
