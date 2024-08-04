@@ -14,8 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { Id } from "../../../../convex/_generated/dataModel";
 import { api } from "../../../../convex/_generated/api";
-import LoadingSpinner from "@/app/components/loading-spinner";
 import Link from "next/link";
+import LoadingSpinner from "@/components/loading-spinner";
 
 type Props = {
   params: {

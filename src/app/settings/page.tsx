@@ -4,7 +4,7 @@ import { useContext } from "react";
 import {
   DEFAULT_SETTINGS,
   SettingsContext,
-} from "../providers/settings-provider";
+} from "@/providers/settings-provider";
 import { Colorscheme } from "@/types";
 import { Input, Section, Slider, Switch } from "./_components";
 import ColorPicker from "./_components/color-picker";

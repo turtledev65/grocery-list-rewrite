@@ -13,11 +13,11 @@ import { useRouter } from "next/navigation";
 import { SidebarContext } from "../providers/sidebar-provider";
 import cn from "classnames";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
 import { useCreateList, useCurrentList } from "../hooks/list";
 import usePanel from "../hooks/ui/use-panel";
 import { SettingsContext } from "../providers/settings-provider";
+import { api } from "../../convex/_generated/api";
+import { Id } from "../../convex/_generated/dataModel";
 
 type SortOrder = "asc" | "desc";
 type SortType = "name" | "creationDate";

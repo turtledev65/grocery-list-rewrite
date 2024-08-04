@@ -2,8 +2,8 @@
 
 import { PropsWithChildren, useContext } from "react";
 import { useRouter } from "next/navigation";
-import { useCreateList } from "../hooks/list";
-import { SettingsContext } from "../providers/settings-provider";
+import { SettingsContext } from "@/providers/settings-provider";
+import { useCreateList } from "@/hooks/list";
 
 const HomePage = () => {
   const router = useRouter();

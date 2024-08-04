@@ -2,11 +2,11 @@
 
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import { api } from "../../../../convex/_generated/api";
-import { Id } from "../../../../convex/_generated/dataModel";
 import { useQuery } from "@tanstack/react-query";
 import { convexQuery } from "@convex-dev/react-query";
 import { List } from "@/types";
+import { api } from "../../../convex/_generated/api";
+import { Id } from "../../../convex/_generated/dataModel";
 
 const useCurrentList = () => {
   const pathname = usePathname();

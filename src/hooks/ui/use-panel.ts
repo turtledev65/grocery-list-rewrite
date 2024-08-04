@@ -1,6 +1,6 @@
 "use client";
 
-import { PanelContext } from "@/app/providers/panel-provider";
+import { PanelContext } from "@/providers/panel-provider";
 import { PanelSection } from "@/types";
 import { useContext } from "react";
 

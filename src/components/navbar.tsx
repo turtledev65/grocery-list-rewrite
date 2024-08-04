@@ -8,9 +8,9 @@ import { FaRegTrashAlt as DeleteIcon } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { SidebarContext } from "../providers/sidebar-provider";
 import { useMutation } from "convex/react";
-import { api } from "../../../convex/_generated/api";
 import { useCurrentList } from "../hooks/list";
 import usePanel from "../hooks/ui/use-panel";
+import { api } from "../../convex/_generated/api";
 
 const Navbar = () => {
   const router = useRouter();
