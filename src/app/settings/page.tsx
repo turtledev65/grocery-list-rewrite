@@ -1,9 +1,13 @@
 "use client";
 
 import { useContext } from "react";
-import { SettingsContext } from "../providers/settings-provider";
+import {
+  DEFAULT_SETTINGS,
+  SettingsContext,
+} from "../providers/settings-provider";
 import { Colorscheme } from "@/types";
 import { Input, Section, Slider, Switch } from "./_components";
+import ColorPicker from "./_components/color-picker";
 
 const SettingsPage = () => {
   const { settings, updateSettings } = useContext(SettingsContext);
@@ -76,17 +80,11 @@ const SettingsPage = () => {
               The accent color use throughout the app
             </p>
           </div>
-          <input
-            type="color"
-            id="color"
-            hidden
+          <ColorPicker
+            defaultValue={DEFAULT_SETTINGS.accentColor}
             value={settings.accentColor}
             onChange={e => updateSettings({ accentColor: e.target.value })}
-          />
-          <label
-            htmlFor="color"
-            className="min-h-8 min-w-8 cursor-pointer rounded-full"
-            style={{ backgroundColor: settings.accentColor }}
+            onReset={() => updateSettings({accentColor: DEFAULT_SETTINGS.accentColor})}
           />
         </div>
         <div className="flex flex-col items-center justify-between gap-2">
