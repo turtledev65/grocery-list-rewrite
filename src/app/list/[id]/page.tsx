@@ -39,7 +39,7 @@ const ListPage = ({ params }: Props) => {
 
   if (status === "pending")
     return (
-      <div className="grid h-full place-items-center">
+      <div className="absolute left-1/2 top-1/2 grid -translate-x-1/2 -translate-y-1/2 place-items-center">
         <LoadingSpinner />
       </div>
     );
