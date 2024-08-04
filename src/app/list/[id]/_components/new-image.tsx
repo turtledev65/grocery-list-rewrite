@@ -13,6 +13,7 @@ const NewImage = () => {
     url && (
       <img
         src={url}
+        alt={newImageFile?.name}
         className="w-full max-w-md cursor-pointer px-2 py-1 grayscale"
       />
     )

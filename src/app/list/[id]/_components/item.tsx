@@ -140,6 +140,7 @@ const ZoomableImage = ({ src, name }: { src: string; name: string }) => {
     <>
       <img
         src={src}
+        alt={name}
         className="w-full max-w-md cursor-pointer px-2 py-1"
         onClick={() => setActive(true)}
       />
