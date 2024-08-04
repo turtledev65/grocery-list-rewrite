@@ -58,7 +58,7 @@ const SettingsPage = () => {
           <div className="w-full">
             <h3 className="text-lg">Base color scheme</h3>
             <p className="text-gray-700 dark:text-zinc-200">
-              The app's color scheme
+              The app&apos;s color scheme
             </p>
           </div>
           <select
