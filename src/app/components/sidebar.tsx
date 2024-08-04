@@ -160,6 +160,8 @@ const Sidebar = () => {
   );
 };
 
+const TIMEOUT = 700;
+
 const ListButton = ({ id, name }: { id: string; name: string }) => {
   const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
@@ -189,7 +191,7 @@ const ListButton = ({ id, name }: { id: string; name: string }) => {
     const timeoutId = setTimeout(() => {
       setSelected(true);
       activatePanel();
-    }, 1200);
+    }, TIMEOUT);
     timeoutRef.current = timeoutId;
   };
 
